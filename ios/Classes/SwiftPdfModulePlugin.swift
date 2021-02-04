@@ -27,7 +27,7 @@ extension CGPDFPage {
   }
 }
 
-public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
+public class SwiftPdfModulePlugin: NSObject, FlutterPlugin {
   static let invalid = NSNumber(value: -1)
   let dispQueue = DispatchQueue(label: "pdf_module")
   let registrar: FlutterPluginRegistrar
@@ -41,8 +41,8 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(
-      name: "pdf_render", binaryMessenger: registrar.messenger())
-    let instance = SwiftPdfRenderPlugin(registrar: registrar)
+      name: "pdf_module", binaryMessenger: registrar.messenger())
+    let instance = SwiftPdfModulePlugin(registrar: registrar)
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 
@@ -80,7 +80,7 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
     else if call.method == "info"
     {
       guard let docId = call.arguments as! NSNumber? else {
-        result(SwiftPdfRenderPlugin.invalid)
+        result(SwiftPdfModulePlugin.invalid)
         return
       }
       result(getInfo(docId: docId.intValue))
@@ -96,7 +96,7 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
     else if call.method == "render"
     {
       guard let args = call.arguments as! NSDictionary? else {
-        result(SwiftPdfRenderPlugin.invalid)
+        result(SwiftPdfModulePlugin.invalid)
         return
       }
       render(args: args, result: result)
@@ -104,7 +104,7 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
     else if call.method == "releaseBuffer"
     {
       guard let address = call.arguments as! NSNumber? else {
-        result(SwiftPdfRenderPlugin.invalid)
+        result(SwiftPdfModulePlugin.invalid)
         return
       }
 
@@ -117,7 +117,7 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
     else if call.method == "releaseTex"
     {
       guard let texId = call.arguments as! NSNumber? else {
-        result(SwiftPdfRenderPlugin.invalid)
+        result(SwiftPdfModulePlugin.invalid)
         return
       }
       releaseTex(texId: texId.int64Value, result: result)
@@ -125,7 +125,7 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
     else if call.method == "resizeTex"
     {
       guard let args = call.arguments as! NSDictionary? else {
-        result(SwiftPdfRenderPlugin.invalid)
+        result(SwiftPdfModulePlugin.invalid)
         return
       }
       resizeTex(args: args, result: result)
@@ -133,7 +133,7 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
     else if call.method == "updateTex"
     {
       guard let args = call.arguments as! NSDictionary? else {
-        result(SwiftPdfRenderPlugin.invalid)
+        result(SwiftPdfModulePlugin.invalid)
         return
       }
       updateTex(args: args, result: result)
@@ -145,9 +145,9 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
 
   func registerNewDoc(_ doc: CGPDFDocument?) -> NSDictionary? {
     guard doc != nil else { return nil }
-    let id = SwiftPdfRenderPlugin.newId
-    SwiftPdfRenderPlugin.newId = SwiftPdfRenderPlugin.newId + 1
-    if SwiftPdfRenderPlugin.newId == SwiftPdfRenderPlugin.invalid.intValue { SwiftPdfRenderPlugin.newId = 0 }
+    let id = SwiftPdfModulePlugin.newId
+    SwiftPdfModulePlugin.newId = SwiftPdfModulePlugin.newId + 1
+    if SwiftPdfModulePlugin.newId == SwiftPdfModulePlugin.invalid.intValue { SwiftPdfModulePlugin.newId = 0 }
     docMap[id] = Doc(doc: doc!)
     return getInfo(docId: id)
   }
@@ -223,16 +223,16 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
   func render(args: NSDictionary, result: @escaping FlutterResult) {
     let docId = args["docId"] as! Int
     guard let doc = docMap[docId] else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
     let pageNumber = args["pageNumber"] as! Int
     guard pageNumber >= 1 && pageNumber <= doc.pages.count else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
     guard let page = doc.pages[pageNumber - 1] else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
 
@@ -293,7 +293,7 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
   func resizeTex(args: NSDictionary, result: @escaping FlutterResult) {
     let texId = args["texId"] as! Int64
     guard let pageTex = textures[texId] else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
     let w = args["width"] as! Int
@@ -304,21 +304,21 @@ public class SwiftPdfRenderPlugin: NSObject, FlutterPlugin {
   func updateTex(args: NSDictionary, result: @escaping FlutterResult) {
     let texId = args["texId"] as! Int64
     guard let pageTex = textures[texId] else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
     let docId = args["docId"] as! Int
     guard let doc = docMap[docId] else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
     let pageNumber = args["pageNumber"] as! Int
     guard pageNumber >= 1 && pageNumber <= doc.pages.count else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
     guard let page = doc.pages[pageNumber - 1] else {
-      result(SwiftPdfRenderPlugin.invalid)
+      result(SwiftPdfModulePlugin.invalid)
       return
     }
 
