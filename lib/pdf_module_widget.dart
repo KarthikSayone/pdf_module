@@ -116,12 +116,9 @@ class PdfViewerController extends TransformationController {
           duration: duration);
 
   Future<void> nextTag() {
-    if(_state.currentTag!=_state._pages.length) {
-      if (_state.widget.tagList
-          .elementAt(_state.currentTag)
-          .pageNumber != _state.widget.tagList
-          .elementAt(_state.currentTag + 1)
-          .pageNumber) {
+    if (_state.currentTag != _state._pages.length) {
+      if (_state.widget.tagList.elementAt(_state.currentTag).pageNumber !=
+          _state.widget.tagList.elementAt(_state.currentTag + 1).pageNumber) {
         goToPage(pageNumber: _state.currentTag + 1);
       }
       _state.currentTag++;
@@ -129,12 +126,9 @@ class PdfViewerController extends TransformationController {
   }
 
   Future<void> previousTag() {
-    if(_state.currentTag!=0) {
-      if (_state.widget.tagList
-          .elementAt(_state.currentTag)
-          .pageNumber != _state.widget.tagList
-          .elementAt(_state.currentTag - 1)
-          .pageNumber) {
+    if (_state.currentTag != 0) {
+      if (_state.widget.tagList.elementAt(_state.currentTag).pageNumber !=
+          _state.widget.tagList.elementAt(_state.currentTag - 1).pageNumber) {
         goToPage(pageNumber: _state.currentTag - 1);
       }
       _state.currentTag--;
@@ -195,7 +189,7 @@ class PdfViewer extends StatefulWidget {
   /// ToDo Feature to add multiple widget to overlay
   final BuildPageContentFunc buildPageOverlay;
 
-  final List<TagModel> tagList;
+  List<TagModel> tagList;
 
   /// Custom page decoration such as drop-shadow.
   final BoxDecoration pageDecoration;
@@ -271,6 +265,30 @@ class PdfViewer extends StatefulWidget {
   @override
   _PdfViewerState createState() => _PdfViewerState();
 
+  addTags(TagModel value) {
+
+    if(tagList== null){
+      tagList = new List<TagModel>();
+    }
+    tagList.add(value);
+  }
+
+  void addString(String value) {
+
+    if(tagList== null){
+      tagList = new List<TagModel>();
+    }
+
+    tagList.add(TagModel(
+        tagType: TagType.SignerName,
+        tagCoordinateX: 120,
+        tagCoordinateY: 560,
+        pageNumber: 1,
+        height: 50,
+        width: 120));
+    print(value);
+  }
+
 /*Future<void> setWidgetToOverlay({@required int pageNumber, double padding, Duration duration = const Duration(milliseconds: 500)})
   => goTo(destination: calculatePageFitMatrix(pageNumber: pageNumber, padding: padding), duration: duration);*/
 
@@ -317,6 +335,15 @@ class _PdfViewerState extends State<PdfViewer>
       if (m != null) {
         _controller.value = m;
       }
+    } else if ((oldWidget.tagList==null&&widget.tagList!=null) ) {
+      //todo update tag state
+      print('UpdateWidget');
+    }else if(oldWidget.tagList!=null&& widget.tagList!=null && oldWidget.tagList.length != widget.tagList.length){
+      print('UpdateWidget if');
+  }else if(oldWidget.tagList!=null|| widget.tagList!=null || oldWidget.tagList.length != widget.tagList.length){
+      print('UpdateWidget if1');
+    }else{
+      print('UpdateWidget else');
     }
   }
 
@@ -491,16 +518,11 @@ class _PdfViewerState extends State<PdfViewer>
     return rect;
   }
 
-  Iterable<Widget> iterateLaidOutPages(Size viewSize) sync* {
-    if (!_firstControllerAttach && _pages != null) {
-      final m = _controller.value;
-      final r = m.row0[0];
-      final exposed =
-          Rect.fromLTWH(-m.row0[3], -m.row1[3], viewSize.width, viewSize.height)
-              .inflate(_padding);
-      //ToDo Add logic to add corresponding widgets
-      listWidgetBuilder.clear();
-      listWidget.clear();
+  void updateTagWidget(Size viewSize){
+    //ToDo Add logic to add corresponding widgets
+    listWidgetBuilder.clear();
+    listWidget.clear();
+    if (widget.tagList != null && widget.tagList.length >0) {
       for (final tag in widget.tagList) {
         listWidgetBuilder.add((context, pageNumber, pageRect) {
           var rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY,
@@ -516,6 +538,18 @@ class _PdfViewerState extends State<PdfViewer>
 
       print('TagList: $tagListLength');
       print('widgetList: $widgetListLength');
+    }
+  }
+
+  Iterable<Widget> iterateLaidOutPages(Size viewSize) sync* {
+    if (!_firstControllerAttach && _pages != null) {
+      final m = _controller.value;
+      final r = m.row0[0];
+      final exposed =
+          Rect.fromLTWH(-m.row0[3], -m.row1[3], viewSize.width, viewSize.height)
+              .inflate(_padding);
+
+      updateTagWidget(viewSize);
 
       for (final page in _pages) {
         if (page.rect == null) continue;
@@ -561,7 +595,7 @@ class _PdfViewerState extends State<PdfViewer>
                                 height: page.realSizeOverlayRect.height,
                                 child: Texture(textureId: page.realSize.texId))
                             : Container()),
-                if (listWidgetBuilder != null || listWidgetBuilder.length > 0)
+                if (listWidgetBuilder != null && listWidgetBuilder.length > 0)
                   for (final tag in listWidgetBuilder)
                     if (tag(context, page.pageNumber, page.rect) != null)
                       tag(context, page.pageNumber, page.rect),
