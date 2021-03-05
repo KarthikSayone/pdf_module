@@ -2,38 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/fill_tag_base_design.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
-class SignerName extends StatefulWidget {
-  /*final String uuid;*/
+class SignedAttachment extends StatefulWidget {
+  // final String uuid;
   final Function onTap;
   final Function onCompleted; // return with a string
   /*final Rect rect;
   final double width;
   final double height;*/
 
-  SignerName({
-    /*this.uuid,*/ this.onTap,
-    this.onCompleted,
-    /*this.rect, this.width, this.height*/
-  });
+  SignedAttachment({this.onTap, this.onCompleted,/* this.rect, this.width, this.height, this.uuid*/});
 
   @override
-  _SignerNameState createState() => _SignerNameState();
+  _SignedAttachmentState createState() => _SignedAttachmentState();
 }
 
-class _SignerNameState extends State<SignerName> {
+class _SignedAttachmentState extends State<SignedAttachment> {
   TextEditingController controller = TextEditingController();
   bool readOnly = false;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.onTap( WrapperWidget.of(context).uuid, "SignerName");
-    });
-  }
-  @override
   Widget build(BuildContext context) {
-
     return Positioned(
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
@@ -42,11 +30,10 @@ class _SignerNameState extends State<SignerName> {
       child: FillTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
-        autoFill: true,
-        onCompleted: () {},
-        label: WrapperWidget.of(context).data == null
-            ? "Signer Name"
-            : WrapperWidget.of(context).data,
+        onCompleted: (){
+
+        },
+        label: "Signed Attachment",
       ),
     );
   }

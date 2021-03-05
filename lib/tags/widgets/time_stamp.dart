@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/fill_tag_base_design.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
-class SignerName extends StatefulWidget {
+class TimeStamp extends StatefulWidget {
   /*final String uuid;*/
   final Function onTap;
   final Function onCompleted; // return with a string
@@ -10,27 +10,21 @@ class SignerName extends StatefulWidget {
   final double width;
   final double height;*/
 
-  SignerName({
+  TimeStamp({
     /*this.uuid,*/ this.onTap,
     this.onCompleted,
     /*this.rect, this.width, this.height*/
   });
 
   @override
-  _SignerNameState createState() => _SignerNameState();
+  _TimeStampState createState() => _TimeStampState();
 }
 
-class _SignerNameState extends State<SignerName> {
+class _TimeStampState extends State<TimeStamp> {
   TextEditingController controller = TextEditingController();
   bool readOnly = false;
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.onTap( WrapperWidget.of(context).uuid, "SignerName");
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -44,9 +38,7 @@ class _SignerNameState extends State<SignerName> {
         height: WrapperWidget.of(context).height,
         autoFill: true,
         onCompleted: () {},
-        label: WrapperWidget.of(context).data == null
-            ? "Signer Name"
-            : WrapperWidget.of(context).data,
+        label:"Time Stamp",
       ),
     );
   }
