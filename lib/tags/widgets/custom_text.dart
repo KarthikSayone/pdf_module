@@ -30,7 +30,7 @@ class _CustomTextState extends State<CustomText> {
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
           print('Text: $text');
-          widget.onCompleted(text, WrapperWidget.of(context).uuid);
+          widget.onCompleted(text, WrapperWidget.of(context).uuid, "CustomText");
         },
         label: "Custom Text",),
     );

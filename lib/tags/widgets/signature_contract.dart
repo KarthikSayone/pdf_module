@@ -31,6 +31,8 @@ class _SignatureContractState extends State<SignatureContract> {
 
   @override
   Widget build(BuildContext context) {
+    if (WrapperWidget.of(context).data != null && Functions().cast<SignatureContractModel>(WrapperWidget.of(context).data).signature!=null)
+      widget.onCompleted(WrapperWidget.of(context).data,WrapperWidget.of(context).uuid, "SignatureContract");
     return Positioned(
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,

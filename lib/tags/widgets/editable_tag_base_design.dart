@@ -42,6 +42,7 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
               setState(() {
                 this.readOnly = true;
                 // ToDo
+                print('onCompleted: $text');
                 widget.onCompleted(text);
               });
             },

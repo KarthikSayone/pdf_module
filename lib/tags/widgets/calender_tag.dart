@@ -7,8 +7,9 @@ class CalenderTag extends StatefulWidget {
   final String uuid;
   final String placeHolderText;
   final Color tagColor;
+  final Function onComplete;
 
-  CalenderTag({this.placeHolderText, this.tagColor, this.uuid});
+  CalenderTag({this.placeHolderText, this.tagColor, this.uuid, this.onComplete});
 
   @override
   _CalenderTagState createState() => _CalenderTagState();
@@ -131,6 +132,7 @@ class _CalenderTagState extends State<CalenderTag> {
         setState(() {
           var s = df.format(date);
           _controller.text = s;
+          widget.onComplete(s, WrapperWidget.of(context).uuid, "Calender");
           print(s);
         });
         Navigator.of(context).pop();

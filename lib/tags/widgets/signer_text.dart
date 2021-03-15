@@ -34,7 +34,7 @@ class _SignerTextState extends State<SignerText> {
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
           print('Text: $text');
-          widget.onCompleted(text, WrapperWidget.of(context).uuid);
+          widget.onCompleted(text, WrapperWidget.of(context).uuid, "SignerText");
         },
         onTap: () {
           print("signer tap");

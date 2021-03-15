@@ -26,6 +26,9 @@ class _InitialsState extends State<Initials> {
 
   @override
   Widget build(BuildContext context) {
+    if (WrapperWidget.of(context).data != null)
+    widget.onCompleted(
+        WrapperWidget.of(context).data, WrapperWidget.of(context).uuid, "Initials");
     return Positioned(
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
@@ -36,7 +39,7 @@ class _InitialsState extends State<Initials> {
         height: WrapperWidget.of(context).height,
         autoFill: false,
         onCompleted: () {
-          // widget.onTap(WrapperWidget.of(context).uuid, "Initials");
+          widget.onCompleted("Initials", WrapperWidget.of(context).uuid);
         },
         onTap: (){
           widget.onTap(WrapperWidget.of(context).uuid, "Initials");

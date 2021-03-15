@@ -5,8 +5,9 @@ class CheckBoxTag extends StatefulWidget {
   final String uuid;
   final Function selectedCallback;
   final bool value;
+  final Function onCompleted;
 
-  CheckBoxTag({@required this.selectedCallback, this.value, this.uuid});
+  CheckBoxTag({@required this.selectedCallback, this.value, this.uuid, this.onCompleted});
 
   @override
   _CheckBoxTagState createState() => _CheckBoxTagState();
@@ -21,6 +22,12 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
     setState(() {
       widget.value != null ? _selected = widget.value : _selected = false;
     });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.selectedCallback(_selected, WrapperWidget
+            .of(context)
+            .uuid, "CheckBox");
+      });
+
   }
 
   @override
@@ -36,7 +43,7 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
             _selected == false ? _selected = true : _selected = false;
           });
 
-          widget.selectedCallback(_selected, WrapperWidget.of(context).uuid);
+          widget.selectedCallback(_selected, WrapperWidget.of(context).uuid, "CheckBox");
         },
         child: Container(
             decoration: BoxDecoration(

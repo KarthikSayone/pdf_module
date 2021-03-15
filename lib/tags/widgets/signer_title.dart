@@ -30,11 +30,11 @@ class _SignerTitleState extends State<SignerTitle> {
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
           print('Text: $text');
-          widget.onCompleted(text, WrapperWidget.of(context).uuid);
+          widget.onCompleted(text, WrapperWidget.of(context).uuid, "SignerTitle");
         },
-        onTap: (){
+        /*onTap: (){
           print("signer tap");
-        },
+        },*/
         label: "Signer Title",),
     );
   }

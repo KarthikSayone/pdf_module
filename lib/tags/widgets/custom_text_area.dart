@@ -30,7 +30,7 @@ class _CustomTextAreaState extends State<CustomTextArea> {
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
           print('Text: $text');
-          widget.onCompleted(text,WrapperWidget.of(context).uuid);
+          widget.onCompleted(text,WrapperWidget.of(context).uuid, "CustomTextArea");
         },
         isTextArea: true,
         label: "Custom TextArea",),

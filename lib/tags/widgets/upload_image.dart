@@ -21,18 +21,14 @@ class UploadImageTag extends StatefulWidget {
 }
 
 class _UploadImageTagState extends State<UploadImageTag> {
-  // bool _isImageAdded = false;
-  File _image;
-
-  // final _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
-    /*if (WrapperWidget.of(context).data != null)
-      widget.onComplete(null,WrapperWidget.of(context).uuid);*/
+    if (WrapperWidget.of(context).data != null)
+      widget.onComplete(WrapperWidget.of(context).data,WrapperWidget.of(context).uuid, "Image");
     return Positioned(
-      top: 100,
-      left: 100,
+      top: WrapperWidget.of(context).rect.top,
+      left: WrapperWidget.of(context).rect.left,
       height: WrapperWidget.of(context).height,
       width: WrapperWidget.of(context).width,
       child: Container(
@@ -72,25 +68,5 @@ class _UploadImageTagState extends State<UploadImageTag> {
       ),
     );
   }
-
-/*Future _getImage() async{
-    try {
-      final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-
-      setState(() {
-        if (pickedFile != null) {
-          _isImageAdded = true;
-          _image = File(pickedFile.path);
-          widget.selectedImage(_image);
-        } else {
-          _isImageAdded = false;
-          print('No image selected.');
-        }
-      });
-    } catch (e) {
-      widget.imagePickError(e);
-    }
-  }
-  }*/
 
 }

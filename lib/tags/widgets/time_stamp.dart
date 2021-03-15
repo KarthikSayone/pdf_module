@@ -24,10 +24,9 @@ class _TimeStampState extends State<TimeStamp> {
   TextEditingController controller = TextEditingController();
   bool readOnly = false;
 
-
   @override
   Widget build(BuildContext context) {
-
+    widget.onCompleted( null, WrapperWidget.of(context).uuid, "TimeStamp");
     return Positioned(
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
@@ -38,7 +37,7 @@ class _TimeStampState extends State<TimeStamp> {
         height: WrapperWidget.of(context).height,
         autoFill: true,
         onCompleted: () {},
-        label:"Time Stamp",
+        label: "Time Stamp",
       ),
     );
   }

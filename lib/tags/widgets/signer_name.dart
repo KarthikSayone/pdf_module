@@ -23,6 +23,7 @@ class SignerName extends StatefulWidget {
 class _SignerNameState extends State<SignerName> {
   TextEditingController controller = TextEditingController();
   bool readOnly = false;
+  
 
   @override
   void initState() {
@@ -33,7 +34,8 @@ class _SignerNameState extends State<SignerName> {
   }
   @override
   Widget build(BuildContext context) {
-
+    if (WrapperWidget.of(context).data != null)
+      widget.onCompleted(WrapperWidget.of(context).data,WrapperWidget.of(context).uuid, "SignerName");
     return Positioned(
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,

@@ -5,6 +5,7 @@ import 'package:pdf_module/tags/widgets/check_box.dart';
 import 'package:pdf_module/tags/widgets/custom_text.dart';
 import 'package:pdf_module/tags/widgets/custom_text_area.dart';
 import 'package:pdf_module/tags/widgets/initials.dart';
+import 'package:pdf_module/tags/widgets/reason.dart';
 import 'package:pdf_module/tags/widgets/sign_here.dart';
 import 'package:pdf_module/tags/widgets/signature_contract.dart';
 import 'package:pdf_module/tags/widgets/signed_attachment.dart';
@@ -49,7 +50,7 @@ class TagHandler {
         break;
       case "2":
         {
-          return  WrapperWidget(
+          return WrapperWidget(
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -57,8 +58,7 @@ class TagHandler {
               height: height,
               child: TimeStamp(
                 onCompleted: onCompleted,
-              )
-          );
+              ));
         }
         break;
       case "3":
@@ -79,13 +79,23 @@ class TagHandler {
               ));
         }
         break;
-      case "32":
-        /*{
-          return Reason(
-            uuid: "12334235434",
+      case "4":
+        {
+          return WrapperWidget(
+            uuid: uuid,
+            pageNumber: pageNumber,
             rect: rect,
+            width: width,
+            height: height,
+            data: data,
+            child: Reason(
+              /*uuid: "12334235434",
+            rect: rect,*/
+              onCompleted: onCompleted,
+              onTap: onTap,
+            ),
           );
-        }*/
+        }
         break;
       case "5":
         {
@@ -182,7 +192,7 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
-              child: SignedAttachment(
+              child: /*Signed*/Attachment(
                 onTap: onTap,
                 onCompleted: onCompleted,
               ));
@@ -218,7 +228,8 @@ class TagHandler {
         }
         break;
       case "27":
-        {print("checkbox");
+        {
+          print("checkbox");
           return WrapperWidget(
               uuid: uuid,
               pageNumber: pageNumber,
@@ -247,7 +258,7 @@ class TagHandler {
               ));
         }
         break;
-      case "4":
+      case "32":
         {
           //id is given as 4 but 4 is already assigned
           return WrapperWidget(
@@ -258,8 +269,9 @@ class TagHandler {
             height: height,
             data: data,
             child: CalenderTag(
-                // rect: rect,
-                ),
+              onComplete: onCompleted,
+              // rect: rect,
+            ),
           );
         }
         break;

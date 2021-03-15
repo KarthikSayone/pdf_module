@@ -50,6 +50,7 @@ typedef LayoutPagesFunc = List<Rect> Function(
 typedef BuildPageContentFunc = Widget Function(
     BuildContext context, int pageNumber, Rect pageRect);
 typedef RetrieveDataFunc<T> = void Function(T data, String uuid);
+typedef TagCompletedFunc<T> = void Function(String uuid, String type, T data);
 
 /// Controller for [PdfViewer].
 /// It is derived from [TransformationController] and basically compatible to [ValueNotifier<Matrix4>].
@@ -206,6 +207,8 @@ class PdfViewer extends StatefulWidget {
 
   final RetrieveDataFunc retrieveData;
 
+  final TagCompletedFunc onTagCompleted;
+
   List<TagModel> tagList;
 
   /// Custom page decoration such as drop-shadow.
@@ -277,7 +280,8 @@ class PdfViewer extends StatefulWidget {
       this.viewerController,
       this.onLongPressDone,
       this.onViewerControllerInitialized,
-      this.retrieveData})
+      this.retrieveData,
+      this.onTagCompleted})
       : super(key: key);
 
   @override
@@ -523,15 +527,16 @@ class _PdfViewerState extends State<PdfViewer>
   }
 
   Rect getPos(
-      double _padding, double x, double y, int pageNumber, Size viewSize) {
+      double _padding, double x, double y, double width, double height, int pageNumber, Size viewSize) {
     var page = _pages[pageNumber - 1];
-
     final maxWidth = _pages.fold<double>(
         0.0, (maxWidth, page) => max(maxWidth, page.pageSize.width));
     final ratio = (viewSize.width - _padding * 2) / maxWidth;
-    double w = (x) * ratio;
-    double h = (page.pageSize.height - y) * ratio;
-    var rect = Rect.fromLTWH(w, h, 100, 100);
+    double l = (x) * ratio;
+    double t = (y) * ratio;
+    double w = (width) * ratio;
+    double h = (height) * ratio;
+    var rect = Rect.fromLTWH(l, t, w, h);
     return rect;
   }
 
@@ -542,21 +547,24 @@ class _PdfViewerState extends State<PdfViewer>
     if (widget.tagList != null && widget.tagList.length > 0) {
       for (final tag in widget.tagList) {
         listWidgetBuilder.add((context, pageNumber, pageRect) {
-          /*var rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY,
-              pageNumber, viewSize);*/
-          var rect =
-              Rect.fromLTWH(tag.tagCoordinateX, tag.tagCoordinateY, 100, 100);
+          var rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY, tag.width, tag.height,
+              pageNumber, viewSize);
+          /*var rect =
+              Rect.fromLTWH(tag.tagCoordinateX, tag.tagCoordinateY, 100, 100);*/
           if (pageNumber == tag.pageNumber)
             return TagHandler().createTag(tag.uuid, tag.tagId, tag.pageNumber,
-                rect, tag.width, tag.height, tag.data, (uuid, type) {
+                rect, rect.width, rect.height, tag.data, (uuid, type) {
               //onTap Function Callback
               widget.retrieveData(type, uuid);
-            }, (T, uuid) {
+            }, (T, uuid, type) {
               // onCompleted Function Callback
               if (T != null) {
                 print('T: $T');
               }
               print("$uuid");
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                widget.onTagCompleted(uuid, type, T);
+              });
             });
           else
             return null;
