@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/editable_tag_base_design.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class SignerText extends StatefulWidget {
@@ -29,18 +30,23 @@ class _SignerTextState extends State<SignerText> {
       left: WrapperWidget.of(context).rect.left,
       height: WrapperWidget.of(context).height,
       width: WrapperWidget.of(context).width,
-      child: EditableTagBaseStructure(
-        width: WrapperWidget.of(context).width,
+      child: ResizebleWidget(
         height: WrapperWidget.of(context).height,
-        onCompleted: (text) {
-          print('Text: $text');
-          widget.onCompleted(text, WrapperWidget.of(context).uuid, "SignerText");
-        },
-        onTap: () {
-          print("signer tap");
-          widget.onTap();
-        },
-        label: "Signer Text",
+      width: WrapperWidget.of(context).width,
+        isDraggable: true,
+              child: EditableTagBaseStructure(
+          width: WrapperWidget.of(context).width,
+          height: WrapperWidget.of(context).height,
+          onCompleted: (text) {
+            print('Text: $text');
+            widget.onCompleted(text, WrapperWidget.of(context).uuid, "SignerText");
+          },
+          onTap: () {
+            print("signer tap");
+            widget.onTap();
+          },
+          label: "Signer Text",
+        ),
       ),
     );
   }

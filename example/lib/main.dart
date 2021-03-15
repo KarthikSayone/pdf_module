@@ -3,6 +3,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:pdf_module/pdf_module_widget.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
+import 'package:pdf_module/tags/widgets/signer_text.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   }*/
 
   void onPress() {
-    pdf.addString("hello");
+    // pdf.addString("hello");
   }
 
   @override
@@ -59,6 +61,20 @@ class _MyAppState extends State<MyApp> {
         c.goToPage(pageNumber: 1); // scrolling animation to page 3.
       },
       // tagList: tagList,
+      buildPageOverlay: (context, index, rect) {
+        return ResizebleWidget(
+          height: 250.0,
+        width: 250.0,
+        isDraggable: true,
+        child: SignerText(
+        onTap: () {
+        },
+        onCompleted: (DD, F , DF) {
+          
+        },
+              ),
+        );
+      },
       onLongPressDone: (details) {
         print("LongPress");
         print(details.globalPosition);
