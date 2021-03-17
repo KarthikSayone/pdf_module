@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class CheckBoxTag extends StatefulWidget {
@@ -15,6 +16,7 @@ class CheckBoxTag extends StatefulWidget {
 
 class _CheckBoxTagState extends State<CheckBoxTag> {
   var _selected = false;
+  ResizableWidgetController widgetController;
 
   @override
   void initState() {
@@ -23,27 +25,33 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
       widget.value != null ? _selected = widget.value : _selected = false;
     });
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        widget.selectedCallback(_selected, WrapperWidget
+        widget.selectedCallback( WrapperWidget
             .of(context)
-            .uuid, "CheckBox");
+            .uuid, "CheckBox",_selected,);
       });
 
   }
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return ResizebleWidget(
+      width: WrapperWidget.of(context).width,
+      height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
-      height: WrapperWidget.of(context).height,
-      width: WrapperWidget.of(context).width,
+      widgetController: widgetController,
+      onWidgetControllerInitialized: (ResizableWidgetController c){
+        widgetController = c;
+        c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+      },
+      isDraggable: false,
       child: InkWell(
         onTap: () {
           setState(() {
             _selected == false ? _selected = true : _selected = false;
           });
 
-          widget.selectedCallback(_selected, WrapperWidget.of(context).uuid, "CheckBox");
+          widget.selectedCallback( WrapperWidget.of(context).uuid, "CheckBox", _selected,);
         },
         child: Container(
             decoration: BoxDecoration(

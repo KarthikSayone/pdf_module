@@ -553,10 +553,10 @@ class _PdfViewerState extends State<PdfViewer>
               Rect.fromLTWH(tag.tagCoordinateX, tag.tagCoordinateY, 100, 100);*/
           if (pageNumber == tag.pageNumber)
             return TagHandler().createTag(tag.uuid, tag.tagId, tag.pageNumber,
-                rect, rect.width, rect.height, tag.data, (uuid, type) {
+                rect, tag.width, tag.height, rect.width, rect.height,tag.data, (uuid, type) {
               //onTap Function Callback
               widget.retrieveData(type, uuid);
-            }, (T, uuid, type) {
+            }, (uuid, type, T) {
               // onCompleted Function Callback
               if (T != null) {
                 print('T: $T');

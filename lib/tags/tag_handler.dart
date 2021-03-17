@@ -24,6 +24,8 @@ class TagHandler {
     Rect rect,
     double width,
     double height,
+    double scaledWidth,
+    double scaledHeight,
     dynamic data,
     Function onTap,
     Function onCompleted,
@@ -37,6 +39,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               data: data,
               child: SignerName(
                 onTap: onTap,
@@ -56,6 +60,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               child: TimeStamp(
                 onCompleted: onCompleted,
               ));
@@ -69,6 +75,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               child: SignerText(
                 /*uuid: uuid,
             rect: rect,
@@ -87,6 +95,8 @@ class TagHandler {
             rect: rect,
             width: width,
             height: height,
+            scaledHeight: scaledHeight,
+            scaledWidth: scaledWidth,
             data: data,
             child: Reason(
               /*uuid: "12334235434",
@@ -105,6 +115,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               data: data,
               child: SignatureContract(
                 onTap: onTap,
@@ -124,6 +136,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               data: data,
               child: Initials(
                 onTap: onTap,
@@ -151,6 +165,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               data: data,
               child: SignerTitle(
                 /*uuid: uuid,
@@ -177,6 +193,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               data: data,
               child: Attachment(
                 onTap: onTap,
@@ -192,7 +210,9 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
-              child: /*Signed*/Attachment(
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
+              child: /*Signed*/ Attachment(
                 onTap: onTap,
                 onCompleted: onCompleted,
               ));
@@ -206,6 +226,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               child: CustomText(
                 onTap: onTap,
                 onCompleted: onCompleted,
@@ -221,6 +243,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               child: CustomTextArea(
                 onTap: onTap,
                 onCompleted: onCompleted,
@@ -236,6 +260,8 @@ class TagHandler {
               rect: rect,
               width: width,
               height: height,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               child: CheckBoxTag(
                 selectedCallback: onCompleted,
                 // rect: rect,
@@ -251,6 +277,8 @@ class TagHandler {
               width: width,
               height: height,
               data: data,
+              scaledHeight: scaledHeight,
+              scaledWidth: scaledWidth,
               child: UploadImageTag(
                 onTap: onTap,
                 onComplete: onCompleted,
@@ -267,6 +295,8 @@ class TagHandler {
             pageNumber: pageNumber,
             width: width,
             height: height,
+            scaledHeight: scaledHeight,
+            scaledWidth: scaledWidth,
             data: data,
             child: CalenderTag(
               onComplete: onCompleted,

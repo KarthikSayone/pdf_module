@@ -31,9 +31,7 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
           color: Color.fromRGBO(216, 243, 254, 1.0),
           child: Padding(
             padding: EdgeInsets.all(5.0),
-            child: Expanded(
-                          child: Container(
-                child: TextField(
+            child: TextField(
       textAlign: TextAlign.center,
       maxLines: widget.isTextArea?null:1,
       style: TextStyle(color: Colors.black, fontSize: 14, ),
@@ -67,10 +65,8 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
           disabledBorder: InputBorder.none,
           hintStyle: TextStyle(fontSize: 7),
           /*contentPadding:
-                  EdgeInsets.symmetric(horizontal: 10),*/
+              EdgeInsets.symmetric(horizontal: 10),*/
           hintText: widget.label),
-                ),
-              ),
             ),
           ),
         ),

@@ -7,6 +7,8 @@ class WrapperWidget extends InheritedWidget{
   final double width;
   final double height;
   final dynamic data;
+  final double scaledWidth;
+  final double scaledHeight;
 
   const WrapperWidget({
     Key key,
@@ -15,6 +17,8 @@ class WrapperWidget extends InheritedWidget{
     @required this.rect,
     @required this.width,
     @required this.height,
+    @required this.scaledHeight,
+    @required this.scaledWidth,
     this.data,
     @required Widget child,
 }):super(key: key, child: child);

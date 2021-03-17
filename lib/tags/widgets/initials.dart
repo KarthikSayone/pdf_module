@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/fill_tag_base_design.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class Initials extends StatefulWidget {
@@ -22,24 +23,32 @@ class Initials extends StatefulWidget {
 
 class _InitialsState extends State<Initials> {
   TextEditingController controller = TextEditingController();
+  ResizableWidgetController widgetController;
   bool readOnly = false;
 
   @override
   Widget build(BuildContext context) {
     if (WrapperWidget.of(context).data != null)
     widget.onCompleted(
-        WrapperWidget.of(context).data, WrapperWidget.of(context).uuid, "Initials");
-    return Positioned(
+         WrapperWidget.of(context).uuid, "Initials",WrapperWidget.of(context).data);
+    return ResizebleWidget(
+      width: WrapperWidget.of(context).width,
+      height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
-      height: WrapperWidget.of(context).height,
-      width: WrapperWidget.of(context).width,
+      widgetController: widgetController,
+      onWidgetControllerInitialized: (ResizableWidgetController c){
+        widgetController = c;
+        c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+      },
+      isDraggable: false,
       child: FillTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
         autoFill: false,
         onCompleted: () {
-          widget.onCompleted("Initials", WrapperWidget.of(context).uuid);
+          widget.onCompleted(
+              WrapperWidget.of(context).uuid, "Initials",WrapperWidget.of(context).data);
         },
         onTap: (){
           widget.onTap(WrapperWidget.of(context).uuid, "Initials");

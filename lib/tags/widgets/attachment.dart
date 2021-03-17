@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:pdf_module/common/functions.dart';
 import 'package:pdf_module/tags/widgets/fill_tag_base_design.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class Attachment extends StatefulWidget {
@@ -24,18 +25,25 @@ class Attachment extends StatefulWidget {
 
 class _AttachmentState extends State<Attachment> {
   TextEditingController controller = TextEditingController();
+  ResizableWidgetController widgetController;
   bool readOnly = false;
 
   @override
   Widget build(BuildContext context) {
     if (WrapperWidget.of(context).data != null)
       widget.onCompleted(
-          WrapperWidget.of(context).data, WrapperWidget.of(context).uuid, "Attachment");
-    return Positioned(
+           WrapperWidget.of(context).uuid, "Attachment",WrapperWidget.of(context).data);
+    return ResizebleWidget(
+      width: WrapperWidget.of(context).width,
+      height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
-      height: WrapperWidget.of(context).height,
-      width: WrapperWidget.of(context).width,
+      widgetController: widgetController,
+      onWidgetControllerInitialized: (ResizableWidgetController c){
+        widgetController = c;
+        c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+      },
+      isDraggable: false,
       child: FillTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,

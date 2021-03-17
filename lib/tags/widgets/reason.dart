@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class Reason extends StatefulWidget {
@@ -15,6 +16,7 @@ class Reason extends StatefulWidget {
 
 class _ReasonState extends State<Reason> {
   var _pickerData = "Select a reason";
+  ResizableWidgetController widgetController;
 
   List<String> _arrayData = [];
 
@@ -28,56 +30,6 @@ class _ReasonState extends State<Reason> {
     });
   }
 
-  /*showPicker() {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        builder: (BuildContext context) {
-          return Container(
-            height: 250,
-            child: DropdownButton<String>(
-              value: _arrayData.elementAt(0),
-              icon: Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String newValue) {
-                setState(() {
-                  // dropdownValue = newValue;
-                });
-              },
-              items: _arrayData.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),*/ /*CupertinoPicker(
-                // backgroundColor: Colors.white,
-                onSelectedItemChanged: (value) {
-                  setState(() {
-                    _pickerData = _arrayData[value];
-                    widget.onSelected(_pickerData);
-                  });
-                },
-                itemExtent: 25.0,
-                children: _arrayData.map((title) {
-                  return Text(
-                    title,
-                    style: TextStyle(fontSize: 13),
-                    maxLines: 1,
-                  );
-                }).toList()),*/ /*
-          );
-        });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     if (WrapperWidget
@@ -89,26 +41,18 @@ class _ReasonState extends State<Reason> {
       // _pickerData = widget.value == null ? "Select a reason" : widget.value;
       // _pickerData = _arrayData.elementAt(0);
     }
-    return Positioned(
-      top: WrapperWidget
-          .of(context)
-          .rect
-          .top,
-      left: WrapperWidget
-          .of(context)
-          .rect
-          .left,
-      height: WrapperWidget
-          .of(context)
-          .height,
-      width: WrapperWidget
-          .of(context)
-          .width,
-      child: /*InkWell(
-        onTap: () {
-          showPicker();
-        },
-        child: */Container(
+    return ResizebleWidget(
+      width: WrapperWidget.of(context).width,
+      height: WrapperWidget.of(context).height,
+      top: WrapperWidget.of(context).rect.top,
+      left: WrapperWidget.of(context).rect.left,
+      widgetController: widgetController,
+      onWidgetControllerInitialized: (ResizableWidgetController c){
+        widgetController = c;
+        c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+      },
+      isDraggable: false,
+      child: Container(
         width: double.infinity,
         height: double.infinity,
         color: Color.fromRGBO(216, 243, 254, 1.0),
@@ -124,6 +68,9 @@ class _ReasonState extends State<Reason> {
                 onChanged: (String newValue) {
                   setState(() {
                     _pickerData = newValue;
+                    widget.onCompleted(WrapperWidget
+                        .of(context)
+                        .uuid, "Reason", newValue);
                   });
                 },
                 items: _arrayData.map<DropdownMenuItem<String>>((String value) {

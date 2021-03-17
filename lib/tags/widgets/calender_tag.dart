@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -18,6 +19,7 @@ class CalenderTag extends StatefulWidget {
 class _CalenderTagState extends State<CalenderTag> {
   TextEditingController _controller = TextEditingController();
   CalendarController _calendarController;
+  ResizableWidgetController widgetController;
 
   @override
   void initState() {
@@ -35,11 +37,17 @@ class _CalenderTagState extends State<CalenderTag> {
   @override
   Widget build(BuildContext context) {
     print("Calender Build");
-    return Positioned(
+    return ResizebleWidget(
+        width: WrapperWidget.of(context).width,
+        height: WrapperWidget.of(context).height,
         top: WrapperWidget.of(context).rect.top,
         left: WrapperWidget.of(context).rect.left,
-        height: WrapperWidget.of(context).height,
-        width: WrapperWidget.of(context).width,
+        widgetController: widgetController,
+        onWidgetControllerInitialized: (ResizableWidgetController c){
+          widgetController = c;
+          c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+        },
+        isDraggable: false,
         child: Container(
           height: double.infinity,
           width: double.infinity,
@@ -132,7 +140,7 @@ class _CalenderTagState extends State<CalenderTag> {
         setState(() {
           var s = df.format(date);
           _controller.text = s;
-          widget.onComplete(s, WrapperWidget.of(context).uuid, "Calender");
+          widget.onComplete( WrapperWidget.of(context).uuid, "Calender", s);
           print(s);
         });
         Navigator.of(context).pop();

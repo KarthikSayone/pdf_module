@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/editable_tag_base_design.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class CustomText extends StatefulWidget {
@@ -17,20 +18,27 @@ class CustomText extends StatefulWidget {
 }
 
 class _CustomTextState extends State<CustomText> {
+  ResizableWidgetController widgetController;
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return ResizebleWidget(
+      width: WrapperWidget.of(context).width,
+      height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
-      height: WrapperWidget.of(context).height,
-      width: WrapperWidget.of(context).width,
+      widgetController: widgetController,
+      onWidgetControllerInitialized: (ResizableWidgetController c){
+        widgetController = c;
+        c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+      },
+      isDraggable: false,
       child: EditableTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
           print('Text: $text');
-          widget.onCompleted(text, WrapperWidget.of(context).uuid, "CustomText");
+          widget.onCompleted( WrapperWidget.of(context).uuid, "CustomText", text);
         },
         label: "Custom Text",),
     );

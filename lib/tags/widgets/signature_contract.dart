@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pdf_module/common/functions.dart';
 import 'package:pdf_module/tags/widgets/model/signature_contract_model.dart';
+import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/sign_here.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
@@ -20,6 +21,7 @@ class SignatureContract extends StatefulWidget {
 }
 
 class _SignatureContractState extends State<SignatureContract> {
+  ResizableWidgetController widgetController;
 
   @override
   void initState() {
@@ -32,12 +34,18 @@ class _SignatureContractState extends State<SignatureContract> {
   @override
   Widget build(BuildContext context) {
     if (WrapperWidget.of(context).data != null && Functions().cast<SignatureContractModel>(WrapperWidget.of(context).data).signature!=null)
-      widget.onCompleted(WrapperWidget.of(context).data,WrapperWidget.of(context).uuid, "SignatureContract");
-    return Positioned(
+      widget.onCompleted(WrapperWidget.of(context).uuid, "SignatureContract",WrapperWidget.of(context).data);
+    return ResizebleWidget(
+      width: WrapperWidget.of(context).width,
+      height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
-      height: WrapperWidget.of(context).height,
-      width: WrapperWidget.of(context).width,
+      widgetController: widgetController,
+      onWidgetControllerInitialized: (ResizableWidgetController c){
+        widgetController = c;
+        c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+      },
+      isDraggable: false,
       child: Container(
         width: double.infinity,
         height: double.infinity,
@@ -53,9 +61,9 @@ class _SignatureContractState extends State<SignatureContract> {
                 )),
             Flexible(
               flex: 1,
-              child: Container(
+              child: Container(/*
                 height: 8,
-                width: WrapperWidget.of(context).width,
+                width: WrapperWidget.of(context).width,*/
                 child: Text(
                     WrapperWidget.of(context).data==null?"UserId to be shown here: UserId":"Userid to be shown here: ${Functions().cast<SignatureContractModel>(WrapperWidget.of(context).data).userUUID}",
                   style: TextStyle(fontSize: 4),
