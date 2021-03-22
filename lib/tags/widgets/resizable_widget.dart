@@ -63,8 +63,8 @@ widget.widgetController?? _myController;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
+    return /*Stack(
+      children: <Widget>[*/
         Positioned(
           top: top,
           left: left,
@@ -90,9 +90,9 @@ widget.widgetController?? _myController;
               child: widget.child,
             ),
           ),
-        ),
+        /*),*/
         // top left
-        isDraggable
+        /*isDraggable
             ? Positioned(
           top: top - ballDiameter / 2,
           left: left - ballDiameter / 2,
@@ -283,8 +283,8 @@ widget.widgetController?? _myController;
             handlerWidget: HandlerWidget.VERTICAL,
           ),
         )
-            : Container(),
-      ],
+            : Container(),*/
+      // ],
     );
   }
 

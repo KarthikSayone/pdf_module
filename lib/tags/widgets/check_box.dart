@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
+import 'model/tag_data_model.dart';
+
 class CheckBoxTag extends StatefulWidget {
   final String uuid;
   final Function selectedCallback;
@@ -25,15 +27,19 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
       widget.value != null ? _selected = widget.value : _selected = false;
     });
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if(WrapperWidget.of(context).data==null)
+          WrapperWidget.of(context).data = TagDataModel();
+        WrapperWidget.of(context).data.checkBox = _selected;
         widget.selectedCallback( WrapperWidget
             .of(context)
-            .uuid, "CheckBox",_selected,);
+            .uuid, "CheckBox",WrapperWidget.of(context).data);
       });
 
   }
 
   @override
   Widget build(BuildContext context) {
+    print("TagBuilder: CheckBox");
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
@@ -50,8 +56,10 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
           setState(() {
             _selected == false ? _selected = true : _selected = false;
           });
-
-          widget.selectedCallback( WrapperWidget.of(context).uuid, "CheckBox", _selected,);
+          if(WrapperWidget.of(context).data==null)
+            WrapperWidget.of(context).data = TagDataModel();
+          WrapperWidget.of(context).data.checkBox = _selected;
+          widget.selectedCallback( WrapperWidget.of(context).uuid, "CheckBox", WrapperWidget.of(context).data);
         },
         child: Container(
             decoration: BoxDecoration(
@@ -60,8 +68,8 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
                   color: Colors.black,
                   width: 0.3,
                 )),
-            height: double.infinity,
-            width: double.infinity,
+            width: WrapperWidget.of(context).width,
+            height: WrapperWidget.of(context).height,
             child: AnimatedOpacity(
                 opacity: _selected ? 1.0 : 0.0,
                 duration: Duration(milliseconds: 200),

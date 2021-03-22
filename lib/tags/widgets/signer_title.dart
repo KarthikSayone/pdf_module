@@ -3,6 +3,8 @@ import 'package:pdf_module/tags/widgets/editable_tag_base_design.dart';
 import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
+import 'model/tag_data_model.dart';
+
 class SignerTitle extends StatefulWidget {
   // final String uuid;
   final Function onTap;
@@ -21,7 +23,17 @@ class _SignerTitleState extends State<SignerTitle> {
   ResizableWidgetController widgetController;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onTap( WrapperWidget.of(context).uuid, "SignerTitle");
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("TagBuilder: SignerTitle");
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
@@ -36,9 +48,13 @@ class _SignerTitleState extends State<SignerTitle> {
       child: EditableTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
+        initialData: WrapperWidget.of(context).data!=null?WrapperWidget.of(context).data.signerTitle:null,
         onCompleted: (text) {
           print('Text: $text');
-          widget.onCompleted( WrapperWidget.of(context).uuid, "SignerTitle", text);
+          if(WrapperWidget.of(context).data==null)
+            WrapperWidget.of(context).data = TagDataModel();
+          WrapperWidget.of(context).data.signerTitle = text;
+          widget.onCompleted( WrapperWidget.of(context).uuid, "SignerTitle", WrapperWidget.of(context).data);
         },
         /*onTap: (){
           print("signer tap");

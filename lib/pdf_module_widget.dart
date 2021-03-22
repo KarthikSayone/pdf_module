@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/editable_placeholder.dart';
+import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 import 'package:vector_math/vector_math_64.dart' as math64;
 import 'pdf_module.dart';
@@ -50,7 +51,7 @@ typedef LayoutPagesFunc = List<Rect> Function(
 typedef BuildPageContentFunc = Widget Function(
     BuildContext context, int pageNumber, Rect pageRect);
 typedef RetrieveDataFunc<T> = void Function(T data, String uuid);
-typedef TagCompletedFunc<T> = void Function(String uuid, String type, T data);
+typedef TagCompletedFunc = void Function(String uuid, String type, TagDataModel data);
 
 /// Controller for [PdfViewer].
 /// It is derived from [TransformationController] and basically compatible to [ValueNotifier<Matrix4>].
@@ -134,8 +135,8 @@ class PdfViewerController extends TransformationController {
     _state.addTags(value);
   }
 
-  addDataToTags(String uuid, dynamic data) {
-    _state.addDataToTags(uuid, data);
+  addDataToTags(String uuid,String type, dynamic data) {
+    _state.addDataToTags(uuid,type, data);
   }
 
   showTags(bool show) {
@@ -328,7 +329,7 @@ class _PdfViewerState extends State<PdfViewer>
     setState(() {});
   }
 
-  addDataToTags(String uuid, dynamic data) {
+  addDataToTags(String uuid,String type, dynamic data) {
     /*listWidget.forEach((element) { if(element.uuid ==uuid){
     element.data = data;
     }
@@ -336,7 +337,57 @@ class _PdfViewerState extends State<PdfViewer>
     print('Data: $data');
     widget.tagList.forEach((element) {
       if (element.uuid == uuid) {
-        element.data = data;
+        if(element.data == null)
+          element.data = TagDataModel();
+        switch (type) {
+          case "SignerName":
+            {
+              element.data.signerName = data;
+            }
+            break;
+          case "SignHere":
+            {
+              element.data.signature = data;
+            }
+            break;
+          case "SignerTitle":
+            {
+              element.data.signerTitle = data;
+            }
+            break;
+          case "Initials":
+            {
+              element.data.initials = data;
+              element.data.signature = data;
+            }
+            break;
+          case "Attachment":
+            {
+              // getFiles(uuid, type);
+            }
+            break;
+          case "SignedAttachment":
+            {
+              // getFiles(uuid, type);
+            }
+            break;
+          case "Image":
+            {
+              element.data.image = data;
+            }
+            break;
+          case "UserUUID":
+            {
+              element.data.userUUID = data;
+            }
+            break;
+          case "Reason":
+            {
+              element.data.reasonList = data;
+            }
+            break;
+        }
+
       }
     });
     setState(() {});
@@ -552,7 +603,7 @@ class _PdfViewerState extends State<PdfViewer>
           /*var rect =
               Rect.fromLTWH(tag.tagCoordinateX, tag.tagCoordinateY, 100, 100);*/
           if (pageNumber == tag.pageNumber)
-            return TagHandler().createTag(tag.uuid, tag.tagId, tag.pageNumber,
+            return TagHandler().createTag(tag.uuid, tag.tagId,tag.key, tag.pageNumber,
                 rect, tag.width, tag.height, rect.width, rect.height,tag.data, (uuid, type) {
               //onTap Function Callback
               widget.retrieveData(type, uuid);

@@ -4,12 +4,12 @@ class EditableTagBaseStructure extends StatefulWidget {
   final double width;
   final double height;
   final Function onCompleted;
-  final Function onTap;
   final String label;
   final bool isTextArea;
+  final String initialData;
 
   EditableTagBaseStructure(
-      {this.width, this.height, this.onCompleted, this.label, this.isTextArea=false, this.onTap});
+      {this.width, this.height, this.onCompleted, this.label, this.isTextArea=false, this.initialData});
 
   @override
   _EditableTagBaseStructureState createState() =>
@@ -22,8 +22,12 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
 
   @override
   Widget build(BuildContext context) {
+    print("TagBuilder: EditableTagBase");
+    if(widget.initialData!=null){
+      controller.text= widget.initialData;
+      widget.onCompleted(widget.initialData);
+    }
     return ConstrainedBox(
-    
       constraints:widget.isTextArea?
           BoxConstraints(minHeight: widget.height, maxWidth: widget.width):
       BoxConstraints(maxHeight: widget.height, maxWidth: widget.width,minHeight: widget.height, minWidth: widget.width),
@@ -38,6 +42,9 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
       readOnly: readOnly,
       autocorrect: false,
       controller: controller,
+      onChanged: (text){
+        widget.onCompleted(text);
+      },
       onSubmitted: (text) {
         // print(text);
         setState(() {

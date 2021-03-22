@@ -28,7 +28,8 @@ class _InitialsState extends State<Initials> {
 
   @override
   Widget build(BuildContext context) {
-    if (WrapperWidget.of(context).data != null)
+    print("TagBuilder: Initials");
+    if (WrapperWidget.of(context).data!=null && WrapperWidget.of(context).data.initials != null)
     widget.onCompleted(
          WrapperWidget.of(context).uuid, "Initials",WrapperWidget.of(context).data);
     return ResizebleWidget(
@@ -53,9 +54,7 @@ class _InitialsState extends State<Initials> {
         onTap: (){
           widget.onTap(WrapperWidget.of(context).uuid, "Initials");
         },
-        label: WrapperWidget.of(context).data == null
-            ? "Initials"
-            : WrapperWidget.of(context).data,
+        label: "Initials",
       ),
     );
   }

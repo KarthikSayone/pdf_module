@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
 
 class WrapperWidget extends InheritedWidget{
   final String uuid;
@@ -6,11 +7,11 @@ class WrapperWidget extends InheritedWidget{
   final Rect rect;
   final double width;
   final double height;
-  final dynamic data;
+  TagDataModel data;
   final double scaledWidth;
   final double scaledHeight;
 
-  const WrapperWidget({
+  WrapperWidget({
     Key key,
     @required this.uuid,
     @required this.pageNumber,
@@ -32,8 +33,8 @@ class WrapperWidget extends InheritedWidget{
   @override
   bool updateShouldNotify(WrapperWidget old)=> old.data!= null || data != old.data;
 
-  set data(dynamic value) {
+  /*set data(dynamic value) {
     data = value;
-  }
+  }*/
 
 }

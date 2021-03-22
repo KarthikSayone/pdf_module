@@ -5,6 +5,7 @@ import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class TimeStamp extends StatefulWidget {
   /*final String uuid;*/
+  final bool isCfrChild;
   final Function onTap;
   final Function onCompleted; // return with a string
   /*final Rect rect;
@@ -14,6 +15,7 @@ class TimeStamp extends StatefulWidget {
   TimeStamp({
     /*this.uuid,*/ this.onTap,
     this.onCompleted,
+    this.isCfrChild = false
     /*this.rect, this.width, this.height*/
   });
 
@@ -28,8 +30,14 @@ class _TimeStampState extends State<TimeStamp> {
 
   @override
   Widget build(BuildContext context) {
+    print("TagBuilder: TimeStamp");
     widget.onCompleted(  WrapperWidget.of(context).uuid, "TimeStamp", null);
-    return ResizebleWidget(
+    return widget.isCfrChild?FillTagBaseStructure(
+      autoFill: true,
+      onCompleted: () {},
+      isCfr: true,
+      label: "Time Stamp",
+    ):ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,

@@ -4,13 +4,17 @@ import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'model/tag_data_model.dart';
+
 class CalenderTag extends StatefulWidget {
-  final String uuid;
-  final String placeHolderText;
+  /*final String uuid;
+  final String placeHolderText;*/
   final Color tagColor;
   final Function onComplete;
 
-  CalenderTag({this.placeHolderText, this.tagColor, this.uuid, this.onComplete});
+  CalenderTag(
+      {/*this.placeHolderText,*/ this.tagColor,
+      /*this.uuid,*/ this.onComplete});
 
   @override
   _CalenderTagState createState() => _CalenderTagState();
@@ -36,21 +40,29 @@ class _CalenderTagState extends State<CalenderTag> {
 
   @override
   Widget build(BuildContext context) {
-    print("Calender Build");
+    print("TagBuilder: Calender");
+    if (_controller.text != null || _controller.text.isNotEmpty) {
+      if (WrapperWidget.of(context).data == null)
+        WrapperWidget.of(context).data = TagDataModel();
+      WrapperWidget.of(context).data.calendar = _controller.text;
+      widget.onComplete(WrapperWidget.of(context).uuid, "Calender",
+          WrapperWidget.of(context).data);
+    }
     return ResizebleWidget(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
         top: WrapperWidget.of(context).rect.top,
         left: WrapperWidget.of(context).rect.left,
         widgetController: widgetController,
-        onWidgetControllerInitialized: (ResizableWidgetController c){
+        onWidgetControllerInitialized: (ResizableWidgetController c) {
           widgetController = c;
-          c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+          c.resize(WrapperWidget.of(context).scaledWidth,
+              WrapperWidget.of(context).scaledHeight);
         },
         isDraggable: false,
         child: Container(
-          height: double.infinity,
-          width: double.infinity,
+          width: WrapperWidget.of(context).width,
+          height: WrapperWidget.of(context).height,
           color: widget.tagColor,
           padding: EdgeInsets.all(5),
           child: Container(
@@ -76,13 +88,30 @@ class _CalenderTagState extends State<CalenderTag> {
                         hintStyle: TextStyle(fontSize: 10),
                         /*contentPadding: EdgeInsets.only(
                               left: 15, bottom: 0, top: 0, right: 15),*/
-                        hintText: widget.placeHolderText),
+                        hintText: "Select Date"),
                     controller: _controller,
+                    onEditingComplete: () {
+                      print("onChanged");
+                      if (WrapperWidget.of(context).data == null)
+                        WrapperWidget.of(context).data = TagDataModel();
+                      WrapperWidget.of(context).data.signerText =
+                          _controller.text;
+                      widget.onComplete(WrapperWidget.of(context).uuid,
+                          "Calender", WrapperWidget.of(context).data);
+                    },
+                    onSubmitted: (text) {
+                      print("onChanged");
+                      if (WrapperWidget.of(context).data == null)
+                        WrapperWidget.of(context).data = TagDataModel();
+                      WrapperWidget.of(context).data.signerText = text;
+                      widget.onComplete(WrapperWidget.of(context).uuid,
+                          "Calender", WrapperWidget.of(context).data);
+                    },
                     onTap: () {
                       FocusScope.of(context).unfocus();
                       showDialog(
                           context: context,
-                          builder: (BuildContext context) {
+                          builder: (context) {
                             return AlertDialog(
                               content: Container(
                                 width: 200,
@@ -134,13 +163,12 @@ class _CalenderTagState extends State<CalenderTag> {
       ),
       calendarController: _calendarController,
       onDaySelected: (date, events, holidays) {
-        final df = new DateFormat('dd/MM/yyyy');
+        final df = new DateFormat.yMMMMd('en_US');
         /*var s = df.format(date);
         _controller.text = s;*/
         setState(() {
           var s = df.format(date);
           _controller.text = s;
-          widget.onComplete( WrapperWidget.of(context).uuid, "Calender", s);
           print(s);
         });
         Navigator.of(context).pop();

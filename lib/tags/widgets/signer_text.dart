@@ -3,6 +3,8 @@ import 'package:pdf_module/tags/widgets/editable_tag_base_design.dart';
 import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
+import 'model/tag_data_model.dart';
+
 class SignerText extends StatefulWidget {
   // final String uuid;
   final Function onTap;
@@ -26,6 +28,7 @@ class _SignerTextState extends State<SignerText> {
   ResizableWidgetController widgetController;
   @override
   Widget build(BuildContext context) {
+    print("TagBuilder: SignerText");
     return /*Positioned(
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
@@ -48,13 +51,16 @@ class _SignerTextState extends State<SignerText> {
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
           print('Text: $text');
+          if(WrapperWidget.of(context).data==null)
+            WrapperWidget.of(context).data = TagDataModel();
+          WrapperWidget.of(context).data.signerText = text;
           widget.onCompleted(
-              WrapperWidget.of(context).uuid, "SignerText", text);
+              WrapperWidget.of(context).uuid, "SignerText", WrapperWidget.of(context).data);
         },
-        onTap: () {
+        /*onTap: () {
           print("signer tap");
           widget.onTap();
-        },
+        },*/
         label: "Signer Text",
       ),
       /*),*/

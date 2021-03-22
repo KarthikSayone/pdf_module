@@ -26,7 +26,8 @@ class _UploadImageTagState extends State<UploadImageTag> {
 
   @override
   Widget build(BuildContext context) {
-    if (WrapperWidget.of(context).data != null)
+    print("TagBuilder: UploadImage");
+    if (WrapperWidget.of(context).data!=null && WrapperWidget.of(context).data.image != null)
       widget.onComplete(WrapperWidget.of(context).uuid, "Image",WrapperWidget.of(context).data,);
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
@@ -40,8 +41,8 @@ class _UploadImageTagState extends State<UploadImageTag> {
       },
       isDraggable: false,
       child: Container(
-        height: double.infinity,
-        width: double.infinity,
+        width: WrapperWidget.of(context).width,
+        height: WrapperWidget.of(context).height,
         color: Color.fromRGBO(216, 243, 254, 1.0),
         child: InkWell(
           onTap: () {
@@ -69,7 +70,7 @@ class _UploadImageTagState extends State<UploadImageTag> {
               : Container(
                   color: Colors.black,
                   child: Image.file(
-                    WrapperWidget.of(context).data,
+                    WrapperWidget.of(context).data.image,
                     fit: BoxFit.cover,
                   )),
         ),

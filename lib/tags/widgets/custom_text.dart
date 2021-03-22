@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/editable_tag_base_design.dart';
+import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
 import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
@@ -22,6 +23,7 @@ class _CustomTextState extends State<CustomText> {
 
   @override
   Widget build(BuildContext context) {
+    print("TagBuilder: CustomText");
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
@@ -38,7 +40,10 @@ class _CustomTextState extends State<CustomText> {
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
           print('Text: $text');
-          widget.onCompleted( WrapperWidget.of(context).uuid, "CustomText", text);
+          if(WrapperWidget.of(context).data==null)
+            WrapperWidget.of(context).data = TagDataModel();
+          WrapperWidget.of(context).data.customText = text;
+          widget.onCompleted( WrapperWidget.of(context).uuid, "CustomText", WrapperWidget.of(context).data);
         },
         label: "Custom Text",),
     );

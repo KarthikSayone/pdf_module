@@ -5,6 +5,7 @@ import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class SignerName extends StatefulWidget {
   /*final String uuid;*/
+  final bool isCfrChild;
   final Function onTap;
   final Function onCompleted; // return with a string
   /*final Rect rect;
@@ -14,6 +15,7 @@ class SignerName extends StatefulWidget {
   SignerName({
     /*this.uuid,*/ this.onTap,
     this.onCompleted,
+    this.isCfrChild = false
     /*this.rect, this.width, this.height*/
   });
 
@@ -36,9 +38,17 @@ class _SignerNameState extends State<SignerName> {
   }
   @override
   Widget build(BuildContext context) {
-    if (WrapperWidget.of(context).data != null)
+    print("TagBuilder: SignerName");
+    if (WrapperWidget.of(context).data!=null && WrapperWidget.of(context).data.signerName != null)
       widget.onCompleted(WrapperWidget.of(context).uuid, "SignerName",WrapperWidget.of(context).data);
-    return ResizebleWidget(
+    return widget.isCfrChild?FillTagBaseStructure(
+      autoFill: true,
+      isCfr: true,
+      onCompleted: () {},
+      label: WrapperWidget.of(context).data==null||WrapperWidget.of(context).data.signerName == null
+          ? "Signer Name"
+          : WrapperWidget.of(context).data.signerName,
+    ):ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,
@@ -54,9 +64,9 @@ class _SignerNameState extends State<SignerName> {
         height: WrapperWidget.of(context).height,
         autoFill: true,
         onCompleted: () {},
-        label: WrapperWidget.of(context).data == null
+        label: WrapperWidget.of(context).data==null||WrapperWidget.of(context).data.signerName == null
             ? "Signer Name"
-            : WrapperWidget.of(context).data,
+            : WrapperWidget.of(context).data.signerName,
       ),
     );
   }

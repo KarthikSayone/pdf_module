@@ -7,6 +7,7 @@ import 'package:pdf_module/tags/widgets/custom_text_area.dart';
 import 'package:pdf_module/tags/widgets/initials.dart';
 import 'package:pdf_module/tags/widgets/reason.dart';
 import 'package:pdf_module/tags/widgets/sign_here.dart';
+import 'package:pdf_module/tags/widgets/signature_21cfr.dart';
 import 'package:pdf_module/tags/widgets/signature_contract.dart';
 import 'package:pdf_module/tags/widgets/signed_attachment.dart';
 import 'package:pdf_module/tags/widgets/signer_name.dart';
@@ -20,6 +21,7 @@ class TagHandler {
   Widget createTag(
     String uuid,
     String tagId,
+    String key,
     int pageNumber,
     Rect rect,
     double width,
@@ -30,8 +32,8 @@ class TagHandler {
     Function onTap,
     Function onCompleted,
   ) {
-    switch (tagId) {
-      case "1":
+    switch (tagId+key) {
+      case "1signerName":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -52,7 +54,7 @@ class TagHandler {
               ));
         }
         break;
-      case "2":
+      case "2signTimeStamp":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -67,7 +69,7 @@ class TagHandler {
               ));
         }
         break;
-      case "3":
+      case "3signerText":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -87,7 +89,7 @@ class TagHandler {
               ));
         }
         break;
-      case "4":
+      case "4Reason":
         {
           return WrapperWidget(
             uuid: uuid,
@@ -107,7 +109,7 @@ class TagHandler {
           );
         }
         break;
-      case "5":
+      case "5Signature":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -128,7 +130,7 @@ class TagHandler {
               ));
         }
         break;
-      case "6":
+      case "6signerInitial":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -157,7 +159,7 @@ class TagHandler {
           );
         }*/
         break;
-      case "10":
+      case "10signerTitle":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -178,14 +180,25 @@ class TagHandler {
               ));
         }
         break;
-      case "15":
-        /*{
-          return Signature21CFR(
+      case "15Signature":
+        {
+          return WrapperWidget(
+            uuid: uuid,
+            pageNumber: pageNumber,
             rect: rect,
+            width: width,
+            height: height,
+            scaledHeight: scaledHeight,
+            scaledWidth: scaledWidth,
+            data: data,
+            child: Signature21CFR(
+              onTap: onTap,
+              onCompleted: onCompleted,
+            ),
           );
-        }*/
+        }
         break;
-      case "18":
+      case "18attachment":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -202,7 +215,7 @@ class TagHandler {
               ));
         }
         break;
-      case "19":
+      case "19selfSignAttachment":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -218,7 +231,7 @@ class TagHandler {
               ));
         }
         break;
-      case "20":
+      case "20customText":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -234,7 +247,7 @@ class TagHandler {
               ));
         }
         break;
-      case "21":
+      case "20customTextArea":
         {
           //id is given as 20 but 20 is already assigned
           return WrapperWidget(
@@ -251,7 +264,7 @@ class TagHandler {
               ));
         }
         break;
-      case "27":
+      case "27checkbox":
         {
           print("checkbox");
           return WrapperWidget(
@@ -268,7 +281,7 @@ class TagHandler {
               ));
         }
         break;
-      case "31":
+      case "31image":
         {
           return WrapperWidget(
               uuid: uuid,
@@ -286,7 +299,7 @@ class TagHandler {
               ));
         }
         break;
-      case "32":
+      case "4Calendar":
         {
           //id is given as 4 but 4 is already assigned
           return WrapperWidget(

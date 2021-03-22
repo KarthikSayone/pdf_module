@@ -2,13 +2,14 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:pdf_module/common/functions.dart';
-import 'package:pdf_module/tags/widgets/model/signature_contract_model.dart';
+import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class FillTagBaseStructure extends StatefulWidget {
   final double width;
   final double height;
   final bool autoFill;
+  bool isCfr;
   final Function onCompleted;
   final Function onTap;
   final String label;
@@ -19,7 +20,8 @@ class FillTagBaseStructure extends StatefulWidget {
       this.autoFill = false,
       this.onCompleted,
       this.onTap,
-      this.label});
+      this.label,
+      this.isCfr = false});
 
   @override
   _FillTagBaseStructureState createState() => _FillTagBaseStructureState();
@@ -45,15 +47,16 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
 
   @override
   Widget build(BuildContext context) {
+    print("TagBuilder: FillTagBase");
     if (Functions()
-                .cast<SignatureContractModel>(WrapperWidget.of(context).data) !=
+                .cast<TagDataModel>(WrapperWidget.of(context).data) !=
             null &&
         Functions()
-                .cast<SignatureContractModel>(WrapperWidget.of(context).data)
+                .cast<TagDataModel>(WrapperWidget.of(context).data)
                 .signature !=
-            null) {
+            null&& !widget.isCfr) {
       image = Functions()
-          .cast<SignatureContractModel>(WrapperWidget.of(context).data)
+          .cast<TagDataModel>(WrapperWidget.of(context).data)
           .signature;
       ind = 1;
       setState(() {});

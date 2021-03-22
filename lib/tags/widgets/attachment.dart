@@ -30,6 +30,7 @@ class _AttachmentState extends State<Attachment> {
 
   @override
   Widget build(BuildContext context) {
+    print("TagBuilder: Attachment");
     if (WrapperWidget.of(context).data != null)
       widget.onCompleted(
            WrapperWidget.of(context).uuid, "Attachment",WrapperWidget.of(context).data);
