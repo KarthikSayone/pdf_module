@@ -1,4 +1,4 @@
-class TagDataModel{
+class TagDataModel {
   dynamic signature;
   dynamic initials;
   dynamic image;
@@ -10,12 +10,13 @@ class TagDataModel{
   String customTextArea;
   String reasonSelected;
   String calendar;
+  String attachmentFileName;
+  String attachmentData;
   List<String> reasonList;
   String userUUID;
 
-
-  TagDataModel({
-      this.signature,
+  TagDataModel(
+      {this.signature,
       this.initials,
       this.image,
       this.checkBox,
@@ -26,8 +27,8 @@ class TagDataModel{
       this.customTextArea,
       this.reasonSelected,
       this.calendar,
+      this.attachmentFileName,
+      this.attachmentData,
       this.reasonList,
       this.userUUID});
-
-
 }

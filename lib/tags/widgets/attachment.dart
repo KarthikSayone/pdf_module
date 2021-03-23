@@ -31,7 +31,7 @@ class _AttachmentState extends State<Attachment> {
   @override
   Widget build(BuildContext context) {
     print("TagBuilder: Attachment");
-    if (WrapperWidget.of(context).data != null)
+    if (WrapperWidget.of(context).data!= null && WrapperWidget.of(context).data.attachmentData != null)
       widget.onCompleted(
            WrapperWidget.of(context).uuid, "Attachment",WrapperWidget.of(context).data);
     return ResizebleWidget(
@@ -54,14 +54,7 @@ class _AttachmentState extends State<Attachment> {
         },
         label: WrapperWidget.of(context).data == null
             ? "Attachment"
-            : Functions()
-                .cast<File>(WrapperWidget.of(context).data)
-                .path
-                .substring(Functions()
-                        .cast<File>(WrapperWidget.of(context).data)
-                        .path
-                        .lastIndexOf("/") +
-                    1),
+            : WrapperWidget.of(context).data.attachmentFileName,
       ),
     );
   }

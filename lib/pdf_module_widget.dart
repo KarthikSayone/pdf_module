@@ -363,6 +363,9 @@ class _PdfViewerState extends State<PdfViewer>
             break;
           case "Attachment":
             {
+              List<String> data1 = data as List;
+              element.data.attachmentFileName = data1[0];
+              element.data.attachmentData = data1[1];
               // getFiles(uuid, type);
             }
             break;
