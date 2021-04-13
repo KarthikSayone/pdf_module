@@ -29,15 +29,16 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
     }
     return ConstrainedBox(
       constraints:widget.isTextArea?
-          BoxConstraints(minHeight: widget.height, maxWidth: widget.width):
-      BoxConstraints(maxHeight: widget.height, maxWidth: widget.width,minHeight: widget.height, minWidth: widget.width),
+      BoxConstraints(minHeight: widget.height, maxWidth: widget.width):
+      BoxConstraints(maxHeight: widget.height, maxWidth: widget.width),
       child: Container(
           color: Color.fromRGBO(216, 243, 254, 1.0),
           child: Padding(
             padding: EdgeInsets.all(5.0),
             child: TextField(
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.left,
       maxLines: widget.isTextArea?null:1,
+      minLines: widget.isTextArea?2:1,
       style: TextStyle(color: Colors.black, fontSize: 14, ),
       readOnly: readOnly,
       autocorrect: false,
@@ -62,15 +63,17 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
           // widget.onTap();
         });
       },
-      decoration: new InputDecoration(
+      decoration: InputDecoration(
           border: InputBorder.none,
           filled: true,
           fillColor: Colors.white,
+          isDense: true,
+          contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
-          hintStyle: TextStyle(fontSize: 7),
+          hintStyle: TextStyle(fontSize: 10,),
           /*contentPadding:
               EdgeInsets.symmetric(horizontal: 10),*/
           hintText: widget.label),

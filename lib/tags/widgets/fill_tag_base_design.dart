@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_module/common/functions.dart';
 import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
@@ -48,13 +49,13 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
   @override
   Widget build(BuildContext context) {
     print("TagBuilder: FillTagBase");
-    if (Functions()
-                .cast<TagDataModel>(WrapperWidget.of(context).data) !=
+    if (Functions().cast<TagDataModel>(WrapperWidget.of(context).data) !=
             null &&
         Functions()
                 .cast<TagDataModel>(WrapperWidget.of(context).data)
                 .signature !=
-            null&& !widget.isCfr) {
+            null &&
+        !widget.isCfr) {
       image = Functions()
           .cast<TagDataModel>(WrapperWidget.of(context).data)
           .signature;
@@ -80,12 +81,19 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
           Container(
             height: widget.height,
             width: widget.width,
-            child: Center(
-              child: Text(
-                widget.label,
-                style: TextStyle(
-                  color: Colors.grey,
-                  // fontSize: 12
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Center(
+                child: AutoSizeText(
+                  widget.label,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    // fontSize: 12
+                  ),
+                  maxLines: 1,
+                  minFontSize: 14,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
                 ),
               ),
             ),
@@ -95,8 +103,10 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
             color: Color.fromRGBO(216, 243, 254, 1.0),
             height: widget.height,
             width: widget.width,
-            child: Center(
-                child: image != null ? Image.memory(image) : Container()),
+            child: FittedBox(
+              child: image != null ? Image.memory(image) : Container(),
+              fit: BoxFit.fill,
+            ),
           ),
         ],
       ),
