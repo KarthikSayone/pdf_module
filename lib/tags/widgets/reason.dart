@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
@@ -69,7 +70,7 @@ class _ReasonState extends State<Reason> {
             items: _arrayData.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value,),
+                child: AutoSizeText(value,),
               );
             }).toList(),
           ),
@@ -115,7 +116,7 @@ class _ReasonState extends State<Reason> {
                 items: _arrayData.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value,),
+                    child: AutoSizeText(value,),
                   );
                 }).toList(),
               ),

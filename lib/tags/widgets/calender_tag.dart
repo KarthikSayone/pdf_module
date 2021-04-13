@@ -24,6 +24,7 @@ class _CalenderTagState extends State<CalenderTag> {
   TextEditingController _controller = TextEditingController();
   CalendarController _calendarController;
   ResizableWidgetController widgetController;
+  String date="";
 
   @override
   void initState() {
@@ -78,6 +79,8 @@ class _CalenderTagState extends State<CalenderTag> {
                   child: TextField(
                     cursorColor: Colors.grey,
                     textAlign: TextAlign.center,
+                    readOnly: true,
+                    showCursor: false,
                     decoration: new InputDecoration(
                         border: InputBorder.none,
                         labelStyle: TextStyle(fontSize: 10),
@@ -85,13 +88,15 @@ class _CalenderTagState extends State<CalenderTag> {
                         enabledBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
                         hintStyle: TextStyle(fontSize: 10),
                         /*contentPadding: EdgeInsets.only(
                               left: 15, bottom: 0, top: 0, right: 15),*/
                         hintText: "Select Date"),
                     controller: _controller,
                     onEditingComplete: () {
-                      print("onChanged");
+                      print("onComplete");
                       if (WrapperWidget.of(context).data == null)
                         WrapperWidget.of(context).data = TagDataModel();
                       WrapperWidget.of(context).data.signerText =
@@ -100,7 +105,7 @@ class _CalenderTagState extends State<CalenderTag> {
                           "Calender", WrapperWidget.of(context).data);
                     },
                     onSubmitted: (text) {
-                      print("onChanged");
+                      print("onSubmitted");
                       if (WrapperWidget.of(context).data == null)
                         WrapperWidget.of(context).data = TagDataModel();
                       WrapperWidget.of(context).data.signerText = text;
@@ -115,7 +120,7 @@ class _CalenderTagState extends State<CalenderTag> {
                             return AlertDialog(
                               content: Container(
                                 width: 200,
-                                child: calenderWidget(context),
+                                child: calenderWidget(context, _controller.text),
                               ),
                             );
                           });
@@ -151,9 +156,10 @@ class _CalenderTagState extends State<CalenderTag> {
         ));
   }
 
-  TableCalendar calenderWidget(BuildContext context) {
+  TableCalendar calenderWidget(BuildContext context, String initialDate) {
     return TableCalendar(
       initialCalendarFormat: CalendarFormat.month,
+      initialSelectedDay: initialDate!=""?DateFormat.yMMMMd('en_US').parse(initialDate):DateTime.now(),
       availableCalendarFormats: const {
         CalendarFormat.month: '',
       },
@@ -174,6 +180,49 @@ class _CalenderTagState extends State<CalenderTag> {
         Navigator.of(context).pop();
         FocusScope.of(context).unfocus();
       },
+      builders: CalendarBuilders(
+        /* selectedDayBuilder: (context, date, _) {
+            return FadeTransition(
+              child: Container(
+                margin: const EdgeInsets.all(4.0),
+                padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+                color: Colors.deepOrange[300],
+                width: 100,
+                height: 100,
+                child: Text(
+                  '${date.day}',
+                  style: TextStyle().copyWith(fontSize: 12.0),
+                ),
+              ),
+            );
+          },*/
+          todayDayBuilder: (context, date, _) {
+            return Container(
+              margin: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+              color: Colors.blue[400],
+              width: 100,
+              height: 100,
+              child: Text(
+                '${date.day}',
+                style: TextStyle().copyWith(fontSize: 12.0),
+              ),
+            );
+          },
+          selectedDayBuilder: (context, date, _) {
+            return Container(
+              margin: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
+              color: Colors.orangeAccent[400],
+              width: 100,
+              height: 100,
+              child: Text(
+                '${date.day}',
+                style: TextStyle().copyWith(fontSize: 12.0),
+              ),
+            );
+          }
+      ),
     );
   }
 }
