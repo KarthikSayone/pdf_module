@@ -121,13 +121,27 @@ class PdfViewerController extends TransformationController {
           duration: duration);
 
   Future<void> nextTag() {
-    if (_state.currentTag != _state._pages.length) {
-      if (_state.widget.tagList.elementAt(_state.currentTag).pageNumber !=
-          _state.widget.tagList.elementAt(_state.currentTag + 1).pageNumber) {
-        goToPage(pageNumber: _state.currentTag + 1);
-      }
+    if (_state.currentTag < _state.widget.tagList.length) {
+      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag+1),duration: Duration(milliseconds: 500));
       _state.currentTag++;
     }
+
+  }
+
+  Matrix4 calculateTagFitMatrix(
+      {@required int tagNumber, double padding, Matrix4 defValue}) {
+    if (tagNumber == null || tagNumber < 0 || tagNumber > _state.widget.tagList.length) {
+      return defValue ?? Matrix4.identity();
+    }
+    final rect = _state.widget.tagList.elementAt(tagNumber).rect?.inflate(padding ?? _state._padding);
+    if (rect == null) return null;
+    final scale = _state._lastViewSize.width / rect.width;
+    final left = max(0.0,
+        rect.left+_state._padding);
+    final top = max(0.0,
+        rect.top+_state._padding);
+    return Matrix4.compose(math64.Vector3(-left*scale, -top*scale, 0),
+        math64.Quaternion.identity(), math64.Vector3(scale, scale, 1));
   }
 
   //ToDo
@@ -144,11 +158,8 @@ class PdfViewerController extends TransformationController {
   }
 
   Future<void> previousTag() {
-    if (_state.currentTag != 0) {
-      if (_state.widget.tagList.elementAt(_state.currentTag).pageNumber !=
-          _state.widget.tagList.elementAt(_state.currentTag - 1).pageNumber) {
-        goToPage(pageNumber: _state.currentTag - 1);
-      }
+    if (_state.currentTag > 0) {
+      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag-1),duration: Duration(milliseconds: 500));
       _state.currentTag--;
     }
   }
@@ -300,7 +311,7 @@ class _PdfViewerState extends State<PdfViewer>
   Map<int, double> _visiblePages = Map<int, double>();
   List<BuildPageContentFunc> listWidgetBuilder = List<BuildPageContentFunc>();
   List<WrapperWidget> listWidget = List<WrapperWidget>();
-  int currentTag = 0;
+  int currentTag = -1;
   AnimationController _animController;
   Animation<Matrix4> _animGoTo;
 
@@ -590,6 +601,10 @@ class _PdfViewerState extends State<PdfViewer>
     double t = (y) * ratio;
     double w = (width) * ratio;
     double h = (height) * ratio;
+    print("l: $l");
+    print("t: $t");
+    print("w: $w");
+    print("h: $h");
     var rect = Rect.fromLTWH(l, t, w, h);
     return rect;
   }
@@ -599,10 +614,13 @@ class _PdfViewerState extends State<PdfViewer>
     listWidgetBuilder.clear();
     listWidget.clear();
     if (widget.tagList != null && widget.tagList.length > 0) {
-      for (final tag in widget.tagList) {
+      for (int i=0;i<widget.tagList.length;i++) {
+        final tag = widget.tagList[i];
         listWidgetBuilder.add((context, pageNumber, pageRect) {
           var rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY, tag.width, tag.height,
               pageNumber, viewSize);
+          print("Hello $i");
+          widget.tagList[i].rect = rect;
           /*var rect =
               Rect.fromLTWH(tag.tagCoordinateX, tag.tagCoordinateY, 100, 100);*/
           if (pageNumber == tag.pageNumber)
