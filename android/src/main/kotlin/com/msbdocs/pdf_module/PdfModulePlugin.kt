@@ -247,7 +247,7 @@ class PdfModulePlugin: FlutterPlugin, MethodCallHandler {
       val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
 
       if (backgroundFill) {
-        bmp.eraseColor(Color.WHITE)
+        bmp.eraseColor(Color.BLACK)
       }
 
       it.render(bmp, null, mat, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
@@ -353,7 +353,7 @@ class PdfModulePlugin: FlutterPlugin, MethodCallHandler {
 
       val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
       if (backgroundFill) {
-        bmp.eraseColor(Color.WHITE)
+        bmp.eraseColor(Color.TRANSPARENT)
       }
       page.render(bmp, null, mat, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
 
