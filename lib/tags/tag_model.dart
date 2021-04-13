@@ -8,6 +8,7 @@ class TagModel {
   String key;
   double tagCoordinateX;
   double tagCoordinateY;
+  Rect rect;
   int pageNumber;
   double width;
   double height;
@@ -21,6 +22,7 @@ class TagModel {
     @required this.tagCoordinateX,
     @required this.tagCoordinateY,
     @required this.pageNumber,
+    this.rect,
     this.height,
     this.width,
     this.data,
