@@ -121,8 +121,8 @@ class PdfViewerController extends TransformationController {
           duration: duration);
 
   Future<void> nextTag() {
-    if (_state.currentTag != _state.widget.tagList.length) {
-      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag),duration: Duration(milliseconds: 500));
+    if (_state.currentTag < _state.widget.tagList.length) {
+      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag+1),duration: Duration(milliseconds: 500));
       _state.currentTag++;
     }
 
@@ -158,9 +158,9 @@ class PdfViewerController extends TransformationController {
   }
 
   Future<void> previousTag() {
-    if (_state.currentTag != 0) {
+    if (_state.currentTag > 0) {
+      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag-1),duration: Duration(milliseconds: 500));
       _state.currentTag--;
-      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag),duration: Duration(milliseconds: 500));
     }
   }
 
@@ -311,7 +311,7 @@ class _PdfViewerState extends State<PdfViewer>
   Map<int, double> _visiblePages = Map<int, double>();
   List<BuildPageContentFunc> listWidgetBuilder = List<BuildPageContentFunc>();
   List<WrapperWidget> listWidget = List<WrapperWidget>();
-  int currentTag = 0;
+  int currentTag = -1;
   AnimationController _animController;
   Animation<Matrix4> _animGoTo;
 
