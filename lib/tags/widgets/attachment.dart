@@ -31,18 +31,20 @@ class _AttachmentState extends State<Attachment> {
   @override
   Widget build(BuildContext context) {
     print("TagBuilder: Attachment");
-    if (WrapperWidget.of(context).data!= null && WrapperWidget.of(context).data.attachmentData != null)
-      widget.onCompleted(
-           WrapperWidget.of(context).uuid, "Attachment",WrapperWidget.of(context).data);
+    if (WrapperWidget.of(context).data != null &&
+        WrapperWidget.of(context).data.attachmentData != null)
+      widget.onCompleted(WrapperWidget.of(context).uuid, "Attachment",
+          WrapperWidget.of(context).data);
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
       widgetController: widgetController,
-      onWidgetControllerInitialized: (ResizableWidgetController c){
+      onWidgetControllerInitialized: (ResizableWidgetController c) {
         widgetController = c;
-        c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
+        c.resize(WrapperWidget.of(context).scaledWidth,
+            WrapperWidget.of(context).scaledHeight);
       },
       isDraggable: false,
       child: FillTagBaseStructure(
@@ -50,7 +52,8 @@ class _AttachmentState extends State<Attachment> {
         height: WrapperWidget.of(context).height,
         onCompleted: () {},
         onTap: () {
-          widget.onTap(WrapperWidget.of(context).uuid, "Attachment");
+          if (WrapperWidget.of(context).data == null)
+            widget.onTap(WrapperWidget.of(context).uuid, "Attachment");
         },
         label: WrapperWidget.of(context).data == null
             ? "Attachment"
