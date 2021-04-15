@@ -29,7 +29,7 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if(WrapperWidget.of(context).data==null)
           WrapperWidget.of(context).data = TagDataModel();
-        WrapperWidget.of(context).data.checkBox = _selected;
+        WrapperWidget.of(context).data.checkBox = null;
         widget.selectedCallback( WrapperWidget
             .of(context)
             .uuid, "CheckBox",WrapperWidget.of(context).data);
