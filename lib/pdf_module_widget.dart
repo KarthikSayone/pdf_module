@@ -51,7 +51,8 @@ typedef LayoutPagesFunc = List<Rect> Function(
 typedef BuildPageContentFunc = Widget Function(
     BuildContext context, int pageNumber, Rect pageRect);
 typedef RetrieveDataFunc<T> = void Function(T data, String uuid);
-typedef TagCompletedFunc = void Function(String uuid, String type, TagDataModel data);
+typedef TagCompletedFunc = void Function(
+    String uuid, String type, TagDataModel data);
 
 /// Controller for [PdfViewer].
 /// It is derived from [TransformationController] and basically compatible to [ValueNotifier<Matrix4>].
@@ -122,25 +123,31 @@ class PdfViewerController extends TransformationController {
 
   Future<void> nextTag() {
     if (_state.currentTag < _state.widget.tagList.length) {
-      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag+1),duration: Duration(milliseconds: 500));
+      goTo(
+          destination: calculateTagFitMatrix(tagNumber: _state.currentTag + 1),
+          duration: Duration(milliseconds: 500));
       _state.currentTag++;
     }
-
   }
 
   Matrix4 calculateTagFitMatrix(
       {@required int tagNumber, double padding, Matrix4 defValue}) {
-    if (tagNumber == null || tagNumber < 0 || tagNumber > _state.widget.tagList.length) {
+    if (tagNumber == null ||
+        tagNumber < 0 ||
+        tagNumber > _state.widget.tagList.length) {
       return defValue ?? Matrix4.identity();
     }
-    final rect = _state.widget.tagList.elementAt(tagNumber).rect?.inflate(padding ?? _state._padding);
+    final pageRect = getPageRect(_state.widget.tagList
+        .elementAt(tagNumber).pageNumber);
+    final rect = _state.widget.tagList
+        .elementAt(tagNumber)
+        .rect
+        ?.inflate(padding ?? _state._padding);
     if (rect == null) return null;
     final scale = _state._lastViewSize.width / rect.width;
-    final left = max(0.0,
-        rect.left+_state._padding);
-    final top = max(0.0,
-        rect.top+_state._padding);
-    return Matrix4.compose(math64.Vector3(-left*scale, -top*scale, 0),
+    final left = max(0.0, rect.left + _state._padding);
+    final top = max(0.0, pageRect.top + rect.top + _state._padding);
+    return Matrix4.compose(math64.Vector3(-left * scale, -top * scale, 0),
         math64.Quaternion.identity(), math64.Vector3(scale, scale, 1));
   }
 
@@ -149,8 +156,8 @@ class PdfViewerController extends TransformationController {
     _state.addTags(value);
   }
 
-  addDataToTags(String uuid,String type, dynamic data) {
-    _state.addDataToTags(uuid,type, data);
+  addDataToTags(String uuid, String type, dynamic data) {
+    _state.addDataToTags(uuid, type, data);
   }
 
   showTags(bool show) {
@@ -159,7 +166,9 @@ class PdfViewerController extends TransformationController {
 
   Future<void> previousTag() {
     if (_state.currentTag > 0) {
-      goTo(destination: calculateTagFitMatrix(tagNumber: _state.currentTag-1),duration: Duration(milliseconds: 500));
+      goTo(
+          destination: calculateTagFitMatrix(tagNumber: _state.currentTag - 1),
+          duration: Duration(milliseconds: 500));
       _state.currentTag--;
     }
   }
@@ -340,7 +349,7 @@ class _PdfViewerState extends State<PdfViewer>
     setState(() {});
   }
 
-  addDataToTags(String uuid,String type, dynamic data) {
+  addDataToTags(String uuid, String type, dynamic data) {
     /*listWidget.forEach((element) { if(element.uuid ==uuid){
     element.data = data;
     }
@@ -348,8 +357,7 @@ class _PdfViewerState extends State<PdfViewer>
     print('Data: $data');
     widget.tagList.forEach((element) {
       if (element.uuid == uuid) {
-        if(element.data == null)
-          element.data = TagDataModel();
+        if (element.data == null) element.data = TagDataModel();
         switch (type) {
           case "SignerName":
             {
@@ -401,7 +409,6 @@ class _PdfViewerState extends State<PdfViewer>
             }
             break;
         }
-
       }
     });
     setState(() {});
@@ -591,8 +598,8 @@ class _PdfViewerState extends State<PdfViewer>
     _docSize = Size(viewSize.width, top);
   }
 
-  Rect getPos(
-      double _padding, double x, double y, double width, double height, int pageNumber, Size viewSize) {
+  Rect getPos(double _padding, double x, double y, double width, double height,
+      int pageNumber, Size viewSize) {
     var page = _pages[pageNumber - 1];
     final maxWidth = _pages.fold<double>(
         0.0, (maxWidth, page) => max(maxWidth, page.pageSize.width));
@@ -614,18 +621,27 @@ class _PdfViewerState extends State<PdfViewer>
     listWidgetBuilder.clear();
     listWidget.clear();
     if (widget.tagList != null && widget.tagList.length > 0) {
-      for (int i=0;i<widget.tagList.length;i++) {
+      for (int i = 0; i < widget.tagList.length; i++) {
         final tag = widget.tagList[i];
         listWidgetBuilder.add((context, pageNumber, pageRect) {
-          var rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY, tag.width, tag.height,
-              pageNumber, viewSize);
+          var rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY,
+              tag.width, tag.height, pageNumber, viewSize);
           print("Hello $i");
           widget.tagList[i].rect = rect;
           /*var rect =
               Rect.fromLTWH(tag.tagCoordinateX, tag.tagCoordinateY, 100, 100);*/
           if (pageNumber == tag.pageNumber)
-            return TagHandler().createTag(tag.uuid, tag.tagId,tag.key, tag.pageNumber,
-                rect, tag.width, tag.height, rect.width, rect.height,tag.data, (uuid, type) {
+            return TagHandler().createTag(
+                tag.uuid,
+                tag.tagId,
+                tag.key,
+                tag.pageNumber,
+                rect,
+                tag.width,
+                tag.height,
+                rect.width,
+                rect.height,
+                tag.data, (uuid, type) {
               //onTap Function Callback
               widget.retrieveData(type, uuid);
             }, (uuid, type, T) {
