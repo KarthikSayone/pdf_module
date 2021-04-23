@@ -91,7 +91,7 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
                     // fontSize: 12
                   ),
                   maxLines: 1,
-                  minFontSize: 14,
+                  minFontSize: 10,
                   overflow: TextOverflow.fade,
                   softWrap: false,
                 ),

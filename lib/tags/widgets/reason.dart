@@ -48,7 +48,7 @@ class _ReasonState extends State<Reason> {
     return widget.isCfrChild?Container(
       color: Color.fromRGBO(216, 243, 254, 1.0),
       child: Padding(
-        padding: const EdgeInsets.all(1.0),
+        padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 1.0),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(isExpanded: true,
             value: _pickerData,

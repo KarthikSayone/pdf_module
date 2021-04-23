@@ -8,15 +8,16 @@ class TimeStamp extends StatefulWidget {
   final bool isCfrChild;
   final Function onTap;
   final Function onCompleted; // return with a string
-  /*final Rect rect;
+  // final Rect rect;
   final double width;
-  final double height;*/
+  final double height;
 
   TimeStamp({
     /*this.uuid,*/ this.onTap,
     this.onCompleted,
-    this.isCfrChild = false
-    /*this.rect, this.width, this.height*/
+    this.isCfrChild = false,
+    this.width, this.height,
+    // this.rect
   });
 
   @override
@@ -33,6 +34,8 @@ class _TimeStampState extends State<TimeStamp> {
     print("TagBuilder: TimeStamp");
     widget.onCompleted(  WrapperWidget.of(context).uuid, "TimeStamp", null);
     return widget.isCfrChild?FillTagBaseStructure(
+      width: widget.width!=null?widget.width:WrapperWidget.of(context).width,
+      height:widget.height!=null?widget.height: WrapperWidget.of(context).height,
       autoFill: true,
       onCompleted: () {},
       isCfr: true,
