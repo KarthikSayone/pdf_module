@@ -42,7 +42,7 @@ class _CalenderTagState extends State<CalenderTag> {
   @override
   Widget build(BuildContext context) {
     print("TagBuilder: Calender");
-    if (_controller.text != null || _controller.text.trim().length!=0) {
+    if (_controller.text != null && _controller.text.isNotEmpty) {
       if (WrapperWidget.of(context).data == null)
         WrapperWidget.of(context).data = TagDataModel();
       WrapperWidget.of(context).data.calendar = _controller.text;
