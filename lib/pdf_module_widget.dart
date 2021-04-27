@@ -273,6 +273,8 @@ class PdfViewer extends StatefulWidget {
   /// Callback that is called on viewer initialization to notify the actual [PdfViewerController] used by the viewer regardless of specifying [viewerController].
   final OnPdfViewerControllerInitialized onViewerControllerInitialized;
 
+  final Function onError;
+
   // final GestureLongPressStartCallback? onLongPressCallback;
 
   PdfViewer(
@@ -302,7 +304,8 @@ class PdfViewer extends StatefulWidget {
       this.onLongPressDone,
       this.onViewerControllerInitialized,
       this.retrieveData,
-      this.onTagCompleted})
+      this.onTagCompleted,
+      this.onError})
       : super(key: key);
 
   @override
@@ -472,6 +475,7 @@ class _PdfViewerState extends State<PdfViewer>
 
   Future<void> load() async {
     _releasePages();
+    try{
     if (widget.filePath != null) {
       _doc = await PdfDocument.openFile(widget.filePath);
     } else if (widget.assetName != null) {
@@ -480,6 +484,9 @@ class _PdfViewerState extends State<PdfViewer>
       _doc = await PdfDocument.openData(widget.data);
     } else {
       _doc = widget.doc;
+    }}
+    catch(e){
+      widget.onError();
     }
 
     if (_doc != null) {
@@ -978,26 +985,26 @@ class _PdfPageState {
 
   _PdfPageState._({@required this.pageNumber, @required this.pageSize});
 
-  Widget previewTexture() => _textureFor(preview, _previewNotifier);
+  /*Widget previewTexture() => _textureFor(preview, _previewNotifier);*/
 
   void updatePreview() {
     _previewNotifier.value++;
   }
 
-  Widget realSizeTexture() => _textureFor(realSize, _realSizeNotifier);
+  /*Widget realSizeTexture() => _textureFor(realSize, _realSizeNotifier);*/
 
   void _updateRealSizeOverlay() {
     _realSizeNotifier.value++;
   }
 
-  /// Returns [Texture] widget wrapped by [ValueListenableBuilder], which does auto-refresh on texture content changes.
+  /*/// Returns [Texture] widget wrapped by [ValueListenableBuilder], which does auto-refresh on texture content changes.
   Widget _textureFor(PdfPageImageTexture t, ValueNotifier<int> n) {
     return ValueListenableBuilder<int>(
       valueListenable: n,
       builder: (context, value, child) =>
           t != null ? Texture(textureId: t.texId) : Container(),
     );
-  }
+  }*/
 
   /// Release allocated textures.
   /// It's always safe to call the method. If all the textures were already released, the method does nothing.
