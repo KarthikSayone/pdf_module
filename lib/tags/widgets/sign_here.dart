@@ -7,10 +7,10 @@ class SignHere extends StatefulWidget {
   final Function onTap;
   final Function onCompleted; // return with a string
   // final Rect rect;
-  // final double width;
-  // final double height;
+  final double width;
+  final double height;
 
-  SignHere({this.onTap, this.onCompleted,/* this.rect, this.width, this.height, this.uuid*/});
+  SignHere({this.onTap, this.onCompleted, this.width, this.height,/* this.rect, this.uuid*/});
 
   @override
   _SignHereState createState() => _SignHereState();
@@ -23,8 +23,8 @@ class _SignHereState extends State<SignHere> {
   @override
   Widget build(BuildContext context) {
     return FillTagBaseStructure(
-        width: WrapperWidget.of(context).width,
-        height: WrapperWidget.of(context).height,
+        width: widget.width!=null?widget.width:WrapperWidget.of(context).width,
+        height:widget.height!=null?widget.height: WrapperWidget.of(context).height,
         onCompleted: (){
 
         },

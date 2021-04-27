@@ -8,14 +8,16 @@ class SignerName extends StatefulWidget {
   final bool isCfrChild;
   final Function onTap;
   final Function onCompleted; // return with a string
-  /*final Rect rect;
+  /*final Rect rect;*/
   final double width;
-  final double height;*/
+  final double height;
 
   SignerName({
     /*this.uuid,*/ this.onTap,
     this.onCompleted,
-    this.isCfrChild = false
+    this.isCfrChild = false,
+    this.width,
+    this.height
     /*this.rect, this.width, this.height*/
   });
 
@@ -42,6 +44,8 @@ class _SignerNameState extends State<SignerName> {
     if (WrapperWidget.of(context).data!=null && WrapperWidget.of(context).data.signerName != null)
       widget.onCompleted(WrapperWidget.of(context).uuid, "SignerName",WrapperWidget.of(context).data);
     return widget.isCfrChild?FillTagBaseStructure(
+      width: widget.width!=null?widget.width:WrapperWidget.of(context).width,
+      height:widget.height!=null?widget.height: WrapperWidget.of(context).height,
       autoFill: true,
       isCfr: true,
       onCompleted: () {},

@@ -78,6 +78,8 @@ class _Signature21CFRState extends State<Signature21CFR> {
                     flex: 1,
                     fit: FlexFit.tight,
                     child: SignHere(
+                      width: WrapperWidget.of(context).width/2,
+                      height: WrapperWidget.of(context).height*(4*7),
                       onTap: (uuid, type) {
                         widget.onTap(uuid, type);
                       },
@@ -92,6 +94,8 @@ class _Signature21CFRState extends State<Signature21CFR> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: SignerName(
+                              width: WrapperWidget.of(context).width/2,
+                              height: WrapperWidget.of(context).height*(4*7),
                               isCfrChild: true,
                               onTap: (uuid, type) {
                                 widget.onTap(uuid, type);
@@ -102,6 +106,8 @@ class _Signature21CFRState extends State<Signature21CFR> {
                             flex: 1,
                             fit: FlexFit.tight,
                             child: TimeStamp(
+                              width: WrapperWidget.of(context).width/2,
+                              height: WrapperWidget.of(context).height*(4*7),
                               isCfrChild: true,
                               onCompleted: (uuid, type, T) {},
                             )),
@@ -115,6 +121,10 @@ class _Signature21CFRState extends State<Signature21CFR> {
                 flex: 2,
                 fit: FlexFit.tight,
                 child: Reason(
+                  /*height:WrapperWidget.of(context).height*(2/7),
+                  width:WrapperWidget.of(context).width,
+                  scaledWidth: WrapperWidget.of(context).scaledWidth,
+                  scaledHeight: WrapperWidget.of(context).scaledHeight*(2/7),*/
                   isCfrChild: true,
                   onCompleted: (uuid, type, T) {
                     isReasonSelected = true;
@@ -133,7 +143,7 @@ class _Signature21CFRState extends State<Signature21CFR> {
               flex: 1,
               fit: FlexFit.tight,
               child: Container(
-                height: 8,
+                height: WrapperWidget.of(context).height/7,
                 width: WrapperWidget.of(context).width,
                 child: Text(
                   WrapperWidget.of(context).data == null
