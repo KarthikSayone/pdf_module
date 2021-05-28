@@ -27,6 +27,7 @@ class _SignatureContractState extends State<SignatureContract> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (WrapperWidget.of(context).data== null || WrapperWidget.of(context).data.userUUID == null)
       widget.onTap( WrapperWidget.of(context).uuid, "UserUUID");
     });
   }
