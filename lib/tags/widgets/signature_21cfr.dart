@@ -150,7 +150,7 @@ class _Signature21CFRState extends State<Signature21CFR> {
                   WrapperWidget.of(context).data == null
                       ? "UserId to be shown here: UserId"
                       : "Userid to be shown here: ${Functions().cast<TagDataModel>(WrapperWidget.of(context).data).userUUID}",
-                  style: TextStyle(fontSize: 4),
+                  style: TextStyle(color: Colors.black,fontSize: 4),
                   textAlign: TextAlign.center,
                 ),
               ),

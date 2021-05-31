@@ -90,7 +90,7 @@ class _CalenderTagState extends State<CalenderTag> {
                         disabledBorder: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
-                        hintStyle: TextStyle(fontSize: 10),
+                        hintStyle: TextStyle(color:Colors.black,fontSize: 10),
                         /*contentPadding: EdgeInsets.only(
                               left: 15, bottom: 0, top: 0, right: 15),*/
                         hintText: "Select Date"),
