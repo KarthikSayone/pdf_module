@@ -28,7 +28,6 @@ class _SignerTextState extends State<SignerText> {
   ResizableWidgetController widgetController;
   @override
   Widget build(BuildContext context) {
-    print("TagBuilder: SignerText");
     return /*Positioned(
       top: WrapperWidget.of(context).rect.top,
       left: WrapperWidget.of(context).rect.left,
@@ -50,7 +49,6 @@ class _SignerTextState extends State<SignerText> {
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
-          print('Text: $text');
           if(WrapperWidget.of(context).data==null)
             WrapperWidget.of(context).data = TagDataModel();
           WrapperWidget.of(context).data.signerText = text;

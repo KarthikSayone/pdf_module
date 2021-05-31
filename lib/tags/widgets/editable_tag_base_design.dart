@@ -22,7 +22,6 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
 
   @override
   Widget build(BuildContext context) {
-    print("TagBuilder: EditableTagBase");
     if(widget.initialData!=null){
       controller.text= widget.initialData;
       widget.onCompleted(widget.initialData);
@@ -51,7 +50,6 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
         setState(() {
           this.readOnly = true;
           // ToDo
-          print('onCompleted: $text');
           widget.onCompleted(text);
         });
       },

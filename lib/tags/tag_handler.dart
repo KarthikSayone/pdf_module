@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pdf_module/tags/widgets/attachment.dart';
 import 'package:pdf_module/tags/widgets/calender_tag.dart';
@@ -19,23 +21,25 @@ import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class TagHandler {
   Widget createTag(
-    String uuid,
-    String tagId,
-    String key,
-    int pageNumber,
-    Rect rect,
-    double width,
-    double height,
-    double scaledWidth,
-    double scaledHeight,
-    dynamic data,
-    Function onTap,
-    Function onCompleted,
-  ) {
+      Key widgetKey,
+      String uuid,
+      String tagId,
+      String key,
+      int pageNumber,
+      Rect rect,
+      double width,
+      double height,
+      double scaledWidth,
+      double scaledHeight,
+      dynamic data,
+      Function onTap,
+      Function onCompleted,
+      ) {
     switch (tagId+key) {
       case "1signerName":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -57,6 +61,7 @@ class TagHandler {
       case "2signTimeStamp":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -72,6 +77,7 @@ class TagHandler {
       case "3signerText":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -92,6 +98,7 @@ class TagHandler {
       case "4Reason":
         {
           return WrapperWidget(
+            key: widgetKey,
             uuid: uuid,
             pageNumber: pageNumber,
             rect: rect,
@@ -112,6 +119,7 @@ class TagHandler {
       case "5Signature":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -133,6 +141,7 @@ class TagHandler {
       case "6signerInitial":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -152,7 +161,7 @@ class TagHandler {
         }
         break;
       case "7":
-        /*{
+      /*{
           return CustodianText(
             uuid: "12334235434",
             rect: rect,
@@ -162,6 +171,7 @@ class TagHandler {
       case "10signerTitle":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -183,6 +193,7 @@ class TagHandler {
       case "15Signature":
         {
           return WrapperWidget(
+            key: widgetKey,
             uuid: uuid,
             pageNumber: pageNumber,
             rect: rect,
@@ -201,6 +212,7 @@ class TagHandler {
       case "18attachment":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -218,6 +230,7 @@ class TagHandler {
       case "19selfSignAttachment":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -234,6 +247,7 @@ class TagHandler {
       case "20customText":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -251,6 +265,7 @@ class TagHandler {
         {
           //id is given as 20 but 20 is already assigned
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -266,8 +281,8 @@ class TagHandler {
         break;
       case "27checkbox":
         {
-          print("checkbox");
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               pageNumber: pageNumber,
               rect: rect,
@@ -284,6 +299,7 @@ class TagHandler {
       case "31image":
         {
           return WrapperWidget(
+              key: widgetKey,
               uuid: uuid,
               rect: rect,
               pageNumber: pageNumber,
@@ -303,6 +319,7 @@ class TagHandler {
         {
           //id is given as 4 but 4 is already assigned
           return WrapperWidget(
+            key: widgetKey,
             uuid: uuid,
             rect: rect,
             pageNumber: pageNumber,

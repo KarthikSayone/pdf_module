@@ -24,9 +24,9 @@ class _SignerTitleState extends State<SignerTitle> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (WrapperWidget.of(context).data== null || WrapperWidget.of(context).data.signerTitle == null)
       widget.onTap( WrapperWidget.of(context).uuid, "SignerTitle");
     });
   }
