@@ -56,6 +56,7 @@ class _ReasonState extends State<Reason> {
             icon: Icon(Icons.arrow_drop_down),
             iconSize: 14,
             elevation: 14,
+            dropdownColor: Colors.white,
             style: TextStyle(color: Colors.black,fontSize: 12),
             onChanged: (String newValue) {
               if(WrapperWidget.of(context).data==null)
