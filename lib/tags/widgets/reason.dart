@@ -56,7 +56,7 @@ class _ReasonState extends State<Reason> {
             icon: Icon(Icons.arrow_drop_down),
             iconSize: 14,
             elevation: 14,
-            style: TextStyle(color: Colors.black54,fontSize: 12),
+            style: TextStyle(color: Colors.black,fontSize: 12),
             onChanged: (String newValue) {
               if(WrapperWidget.of(context).data==null)
                 WrapperWidget.of(context).data = TagDataModel();
@@ -71,7 +71,7 @@ class _ReasonState extends State<Reason> {
             items: _arrayData.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: AutoSizeText(value,),
+                child: AutoSizeText(value,style: TextStyle(color: Colors.black)),
               );
             }).toList(),
           ),
@@ -102,7 +102,7 @@ class _ReasonState extends State<Reason> {
                 icon: Icon(Icons.arrow_drop_down),
                 iconSize: 18,
                 elevation: 14,
-                style: TextStyle(color: Colors.black54,fontSize: 13),
+                style: TextStyle(color: Colors.black,fontSize: 13),
                 onChanged: (String newValue) {
                 if(WrapperWidget.of(context).data==null)
                   WrapperWidget.of(context).data = TagDataModel();
@@ -117,7 +117,7 @@ class _ReasonState extends State<Reason> {
                 items: _arrayData.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: AutoSizeText(value,),
+                    child: AutoSizeText(value,style: TextStyle(color: Colors.black)),
                   );
                 }).toList(),
               ),

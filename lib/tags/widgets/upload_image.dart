@@ -57,11 +57,11 @@ class _UploadImageTagState extends State<UploadImageTag> {
                       children: [
                         Text(
                           "Upload Image",
-                          style: TextStyle(fontSize: 13),
+                          style: TextStyle(color:Colors.black,fontSize: 13),
                         ),
                         Text(
                           "PNG,JPEG,JPG only(Max Size: 500 KB)",
-                          style: TextStyle(fontSize: 5),
+                          style: TextStyle(color:Colors.black,fontSize: 5),
                         )
                       ],
                     ),

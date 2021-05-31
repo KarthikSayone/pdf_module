@@ -71,7 +71,7 @@ class _EditableTagBaseStructureState extends State<EditableTagBaseStructure> {
           enabledBorder: InputBorder.none,
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
-          hintStyle: TextStyle(fontSize: 10,),
+          hintStyle: TextStyle(color: Colors.black,fontSize: 10,),
           /*contentPadding:
               EdgeInsets.symmetric(horizontal: 10),*/
           hintText: widget.label),
