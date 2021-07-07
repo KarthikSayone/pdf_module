@@ -1,14 +1,13 @@
-
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ffi';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 const MethodChannel _channel =
-const MethodChannel('pdf_module');
+MethodChannel('pdf_module');
 
 /// Handles PDF document loaded on memory.
 class PdfDocument {
@@ -28,8 +27,6 @@ class PdfDocument {
   final bool allowsCopying;
   /// Determine whether the PDF file allows printing of the pages.
   final bool allowsPrinting;
-  //final bool isUnlocked;
-
   final List<PdfPage> _pages;
 
   PdfDocument._({
@@ -38,7 +35,6 @@ class PdfDocument {
     this.pageCount,
     this.verMajor, this.verMinor,
     this.isEncrypted, this.allowsCopying, this.allowsPrinting,
-    //this.isUnlocked,
   }) : _pages = List<PdfPage>(pageCount);
 
   Future<void> dispose() async {
@@ -57,12 +53,10 @@ class PdfDocument {
         isEncrypted: obj['isEncrypted'] as bool,
         allowsCopying: obj['allowsCopying'] as bool,
         allowsPrinting: obj['allowsPrinting'] as bool,
-        //isUnlocked: obj['isUnlocked'] as bool
       );
     } else {
       return null;
     }
-
   }
 
   /// Opening the specified file.
@@ -82,11 +76,12 @@ class PdfDocument {
 
   /// Get page object. The first page is 1.
   Future<PdfPage> getPage(int pageNumber) async {
-    if (pageNumber < 1 || pageNumber > pageCount)
+    if (pageNumber < 1 || pageNumber > pageCount) {
       return null;
+    }
     var page = _pages[pageNumber - 1];
     if (page == null) {
-      var obj = await _channel.invokeMethod('page', {
+      final obj = await _channel.invokeMethod('page', {
         "docId": docId,
         "pageNumber": pageNumber
       });
@@ -205,8 +200,7 @@ class PdfPageImage {
     if (_pixels == null) {
       throw Exception('PdfPageImage was disposed.');
     }
-    _imageCached ??= await _decodeRgba(width, height, _pixels);
-    return _imageCached;
+    return _imageCached ??= await _decodeRgba(width, height, _pixels);
   }
 
   /// Get [Image] for the object if available; otherwise null.
@@ -223,7 +217,7 @@ class PdfPageImage {
         bool allowAntialiasingIOS,
       }) async {
 
-    var obj = await _channel.invokeMethod(
+    final obj = await _channel.invokeMethod(
         'render',
         {
           'docId': document.docId, 'pageNumber': pageNumber,
@@ -309,12 +303,14 @@ class PdfPageImageTexture {
   int get texHeight => _texHeight;
   bool get hasUpdatedTexture => _texWidth != null;
 
+  @override
   bool operator ==(Object other) {
     return other is PdfPageImageTexture &&
         other.pdfDocument == pdfDocument &&
         other.pageNumber == pageNumber;
   }
 
+  @override
   int get hashCode => pdfDocument.docId ^ pageNumber;
 
   PdfPageImageTexture._({this.pdfDocument, this.pageNumber, this.texId});

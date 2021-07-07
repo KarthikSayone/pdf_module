@@ -1,16 +1,15 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:pdf_module/tags/widgets/editable_placeholder.dart';
 import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 import 'package:vector_math/vector_math_64.dart' as math64;
+
 import 'pdf_module.dart';
-import 'tags/tag_model.dart';
 import 'tags/tag_handler.dart';
+import 'tags/tag_model.dart';
 
 /// Function definition to generate the actual widget that contains rendered PDF page image.
 /// [size] should be the page widget size but it can be null if you don't want to calculate it.
@@ -67,7 +66,7 @@ class PdfViewerController extends TransformationController {
   /// Associate a [_PdfViewerState] to the controller.
   void _setViewerState(_PdfViewerState state) {
     _state = state;
-    this.notifyListeners();
+    notifyListeners();
   }
 
   /// Whether the controller is ready or not.
@@ -77,12 +76,9 @@ class PdfViewerController extends TransformationController {
   int get pageCount => _state?._pages?.length;
 
   /// Get page location.
-  Rect getPageRect(int pageNumber) =>
-      _state == null
-          ? null
-          : _state._pages
-          .firstWhere((p) => p.pageNumber == pageNumber, orElse: null)
-          ?.rect;
+  Rect getPageRect(int pageNumber) => _state?._pages
+      ?.firstWhere((p) => p.pageNumber == pageNumber, orElse: () => null)
+      ?.rect;
 
   /// Calculate the matrix that corresponding to the page position.
   /// [defValue] is the default value for invalid page number case.
@@ -108,23 +104,25 @@ class PdfViewerController extends TransformationController {
 
   /// Go to the destination specified by the matrix.
   /// To go to a specific page, use [goToPage] method or use [calculatePageFitMatrix] method to calculate the page location matrix.
-  Future<void> goTo({Matrix4 destination,
-    Duration duration = const Duration(milliseconds: 200)}) =>
+  Future<void> goTo(
+          {Matrix4 destination,
+          Duration duration = const Duration(milliseconds: 200)}) =>
       _state._goTo(destination: destination, duration: duration);
 
-  Future<void> goToPage({@required int pageNumber,
-    double padding,
-    Duration duration = const Duration(milliseconds: 500)}) =>
+  Future<void> goToPage(
+          {@required int pageNumber,
+          double padding,
+          Duration duration = const Duration(milliseconds: 500)}) =>
       goTo(
           destination:
-          calculatePageFitMatrix(pageNumber: pageNumber, padding: padding),
+              calculatePageFitMatrix(pageNumber: pageNumber, padding: padding),
           duration: duration);
 
-  Future<void> nextTag() {
+  Future<void> nextTag() async {
     if (_state.currentTag < _state.widget.tagList.length) {
       goTo(
           destination: calculateTagFitMatrix(tagNumber: _state.currentTag + 1),
-          duration: Duration(milliseconds: 500));
+          duration: const Duration(milliseconds: 500));
       _state.currentTag++;
     }
   }
@@ -137,9 +135,7 @@ class PdfViewerController extends TransformationController {
       return defValue ?? Matrix4.identity();
     }
     final pageRect =
-    getPageRect(_state.widget.tagList
-        .elementAt(tagNumber)
-        .pageNumber);
+        getPageRect(_state.widget.tagList.elementAt(tagNumber).pageNumber);
     final rect = _state.widget.tagList
         .elementAt(tagNumber)
         .rect
@@ -152,33 +148,31 @@ class PdfViewerController extends TransformationController {
         math64.Quaternion.identity(), math64.Vector3(scale, scale, 1));
   }
 
-  //ToDo
-  addTags(TagModel value) {
+  void addTags(TagModel value) {
     _state.addTags(value);
   }
 
-  addDataToTags(String uuid, String type, dynamic data) {
+  void addDataToTags(String uuid, String type, dynamic data) {
     _state.addDataToTags(uuid, type, data);
   }
 
-  showTags(bool show) {
-    _state.showTags(show);
+  void showTags({bool show}) {
+    _state.showTags(show: show);
   }
 
-  Future<void> previousTag() {
+  Future<void> previousTag() async {
     if (_state.currentTag > 0) {
       goTo(
           destination: calculateTagFitMatrix(tagNumber: _state.currentTag - 1),
-          duration: Duration(milliseconds: 500));
+          duration: const Duration(milliseconds: 500));
       _state.currentTag--;
     }
   }
 
   /// Current view rectangle.
-  Rect get viewRect =>
-      _state == null
-          ? null
-          : Rect.fromLTWH(-value.row0[3], -value.row1[3],
+  Rect get viewRect => _state == null
+      ? null
+      : Rect.fromLTWH(-value.row0[3], -value.row1[3],
           _state._lastViewSize.width, _state._lastViewSize.height);
 
   /// Current view zoom ratio.
@@ -279,34 +273,35 @@ class PdfViewer extends StatefulWidget {
 
   // final GestureLongPressStartCallback? onLongPressCallback;
 
-  PdfViewer({Key key,
-    this.filePath,
-    this.assetName,
-    this.data,
-    this.doc,
-    this.pageNumber,
-    this.padding,
-    this.layoutPages,
-    this.buildPagePlaceholder,
-    this.buildPageOverlay,
-    this.tagList,
-    this.pageDecoration,
-    this.alignPanAxis = false,
-    this.allowAntialiasingIOS = true,
-    this.boundaryMargin = EdgeInsets.zero,
-    this.maxScale = 20,
-    this.minScale = 0.1,
-    this.onInteractionEnd,
-    this.onInteractionStart,
-    this.onInteractionUpdate,
-    this.panEnabled = true,
-    this.scaleEnabled = true,
-    this.viewerController,
-    this.onLongPressDone,
-    this.onViewerControllerInitialized,
-    this.retrieveData,
-    this.onTagCompleted,
-    this.onError})
+  PdfViewer(
+      {Key key,
+      this.filePath,
+      this.assetName,
+      this.data,
+      this.doc,
+      this.pageNumber,
+      this.padding,
+      this.layoutPages,
+      this.buildPagePlaceholder,
+      this.buildPageOverlay,
+      this.tagList,
+      this.pageDecoration,
+      this.alignPanAxis = false,
+      this.allowAntialiasingIOS = true,
+      this.boundaryMargin = EdgeInsets.zero,
+      this.maxScale = 20,
+      this.minScale = 0.1,
+      this.onInteractionEnd,
+      this.onInteractionStart,
+      this.onInteractionUpdate,
+      this.panEnabled = true,
+      this.scaleEnabled = true,
+      this.viewerController,
+      this.onLongPressDone,
+      this.onViewerControllerInitialized,
+      this.retrieveData,
+      this.onTagCompleted,
+      this.onError})
       : super(key: key);
 
   @override
@@ -321,7 +316,7 @@ class _PdfViewerState extends State<PdfViewer>
   Size _lastViewSize;
   Timer _realSizeUpdateTimer;
   Size _docSize;
-  Map<int, double> _visiblePages = Map<int, double>();
+  final Map<int, double> _visiblePages = <int, double>{};
   List<BuildPageContentFunc> listWidgetBuilder = <BuildPageContentFunc>[];
   Map<int, List<WrapperWidget>> listWidget = <int, List<WrapperWidget>>{};
   Map<int, List<WrapperWidget>> tempListWidget = <int, List<WrapperWidget>>{};
@@ -342,31 +337,24 @@ class _PdfViewerState extends State<PdfViewer>
   void initState() {
     super.initState();
     _animController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
     init();
   }
 
-  addTags(TagModel value) {
-    if (widget.tagList == null) {
-      widget.tagList = new List<TagModel>();
-    }
+  void addTags(TagModel value) {
+    widget.tagList ??= <TagModel>[];
     widget.tagList.add(value);
     setState(() {});
   }
 
-  addDataToTags(String uuid, String type, dynamic data) {
-    /*listWidget.forEach((element) { if(element.uuid ==uuid){
-    element.data = data;
-    }
-    });*/
-    print('Data: $data');
+  void addDataToTags(String uuid, String type, dynamic data) {
     widget.tagList.forEach((element) {
       if (element.uuid == uuid) {
-        if (element.data == null) element.data = TagDataModel();
+        element.data ??= TagDataModel();
         switch (type) {
           case "SignerName":
             {
-              element.data.signerName = data;
+              element.data.signerName = data as String;
             }
             break;
           case "SignHere":
@@ -376,7 +364,7 @@ class _PdfViewerState extends State<PdfViewer>
             break;
           case "SignerTitle":
             {
-              element.data.signerTitle = data;
+              element.data.signerTitle = data as String;
             }
             break;
           case "Initials":
@@ -387,16 +375,13 @@ class _PdfViewerState extends State<PdfViewer>
             break;
           case "Attachment":
             {
-              List<String> data1 = data as List;
+              final List<String> data1 = data as List<String>;
               element.data.attachmentFileName = data1[0];
               element.data.attachmentData = data1[1];
-              // getFiles(uuid, type);
             }
             break;
           case "SignedAttachment":
-            {
-              // getFiles(uuid, type);
-            }
+            {}
             break;
           case "Image":
             {
@@ -405,12 +390,12 @@ class _PdfViewerState extends State<PdfViewer>
             break;
           case "UserUUID":
             {
-              element.data.userUUID = data;
+              element.data.userUUID = data as String;
             }
             break;
           case "Reason":
             {
-              element.data.reasonList = data;
+              element.data.reasonList = data as List<String>;
             }
             break;
         }
@@ -420,7 +405,7 @@ class _PdfViewerState extends State<PdfViewer>
     setState(() {});
   }
 
-  showTags(bool show) {
+  void showTags({bool show}) {
     _showTags = show;
     setState(() {});
   }
@@ -429,48 +414,30 @@ class _PdfViewerState extends State<PdfViewer>
   void didUpdateWidget(PdfViewer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!_widgetDocsEqual(oldWidget)) {
-      print('init update');
       init();
     } else if (oldWidget.pageNumber != widget.pageNumber) {
-      print('pageNumber update');
       widget.onViewerControllerInitialized?.call(_controller);
       final m =
-      _controller.calculatePageFitMatrix(pageNumber: widget.pageNumber);
+          _controller.calculatePageFitMatrix(pageNumber: widget.pageNumber);
       if (m != null) {
         _controller.value = m;
       }
     } else if ((oldWidget.tagList == null && widget.tagList != null) ||
         (widget.tagList != null &&
             oldWidget.tagList.length != widget.tagList.length)) {
-      //todo update tag state
-      print('UpdateWidget');
       _updateTagWidget(viewSize);
-    }/* else if (oldWidget.tagList.any((element) =>
-        widget.tagList.any((element1) {
-          if(element.uuid == element1.uuid) {
-            if(element1.data!=null)
-            print("tagList ${element1.data.signerName}");
-            if(element.data!=null)
-            print("OldWidget ${element.data.signerName}");
-          }
-          if (element.uuid == element1.uuid && ((element.data==null && element1!=null)|| element1.data != element.data)) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-        ))) {
-      _updateTagWidget(viewSize);
-    }*/
+    }
   }
 
   bool _widgetDocsEqual(PdfViewer oldWidget) {
-    if (oldWidget.filePath != null && oldWidget.filePath == widget.filePath)
+    if (oldWidget.filePath != null && oldWidget.filePath == widget.filePath) {
       return true;
-    if (oldWidget.assetName != null && oldWidget.assetName == widget.assetName)
+    }
+    if (oldWidget.assetName != null &&
+        oldWidget.assetName == widget.assetName) {
       return true;
+    }
     if (oldWidget.data != null && oldWidget.data == widget.data) {
-      print("updating widget");
       return true;
     }
     if (oldWidget.doc != null && oldWidget.doc == widget.doc) return true;
@@ -514,7 +481,7 @@ class _PdfViewerState extends State<PdfViewer>
     }
 
     if (_doc != null) {
-      final pages = List<_PdfPageState>();
+      final pages = <_PdfPageState>[];
       final firstPage = await _doc.getPage(1);
       final pageSize1 = Size(firstPage.width, firstPage.height);
       for (int i = 0; i < _doc.pageCount; i++) {
@@ -543,7 +510,7 @@ class _PdfViewerState extends State<PdfViewer>
       builder: (context, constraints) {
         viewSize = Size(constraints.maxWidth, constraints.maxHeight);
         _relayout(viewSize);
-        final docSize = _docSize ?? Size(10, 10); // dummy size
+        final docSize = _docSize ?? const Size(10, 10); // dummy size
         return InteractiveViewer(
             transformationController: widget.viewerController ?? _controller,
             constrained: false,
@@ -558,6 +525,7 @@ class _PdfViewerState extends State<PdfViewer>
             scaleEnabled: widget.scaleEnabled,
             child: Stack(
               children: <Widget>[
+                Container(width: viewSize.width, height: viewSize.height),
                 SizedBox(width: docSize.width, height: docSize.height),
                 ...iterateLaidOutPages(viewSize)
               ],
@@ -576,7 +544,7 @@ class _PdfViewerState extends State<PdfViewer>
       _relayoutDefault(viewSize);
     } else {
       final contentSize =
-      Size(viewSize.width - _padding * 2, viewSize.height - _padding * 2);
+          Size(viewSize.width - _padding * 2, viewSize.height - _padding * 2);
       final rects = widget.layoutPages(
           contentSize, _pages.map((p) => p.pageSize).toList());
       var allRect = Rect.fromLTWH(0, 0, viewSize.width, viewSize.height);
@@ -631,43 +599,30 @@ class _PdfViewerState extends State<PdfViewer>
 
   Rect getPos(double _padding, double x, double y, double width, double height,
       int pageNumber, Size viewSize) {
-    var page = _pages[pageNumber - 1];
     final maxWidth = _pages.fold<double>(
         0.0, (maxWidth, page) => max(maxWidth, page.pageSize.width));
     final ratio = (viewSize.width - _padding * 2) / maxWidth;
-    double l = (x) * ratio;
-    double t = (y) * ratio;
-    double w = (width) * ratio;
-    double h = (height) * ratio;
-    print("l: $l");
-    print("t: $t");
-    print("w: $w");
-    print("h: $h");
-    var rect = Rect.fromLTWH(l, t, w, h);
+    final double l = x * ratio;
+    final double t = y * ratio;
+    final double w = width * ratio;
+    final double h = height * ratio;
+    final rect = Rect.fromLTWH(l, t, w, h);
     return rect;
   }
 
   void _updateTagWidget(Size viewSize) {
-    //ToDo Add logic to add corresponding widgets
-    print('updateTagWidget');
     listWidget.clear();
-    if (widget.tagList != null && widget.tagList.length > 0) {
-      var keyList = new List.generate(
-          widget.tagList.length, (_) => Random().nextInt(99999));
+    if (widget.tagList != null && widget.tagList.isNotEmpty) {
+      final keyList =
+          List.generate(widget.tagList.length, (_) => Random().nextInt(99999));
       for (int i = 0; i < widget.tagList.length; i++) {
         final tag = widget.tagList[i];
         for (final page in _pages) {
-          var rect = getPos(
-              _padding,
-              tag.tagCoordinateX,
-              tag.tagCoordinateY,
-              tag.width,
-              tag.height,
-              page.pageNumber,
-              viewSize);
+          final rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY,
+              tag.width, tag.height, page.pageNumber, viewSize);
           widget.tagList[i].rect = rect;
           if (page.pageNumber == tag.pageNumber) {
-            WrapperWidget wrapperWidget = TagHandler().createTag(
+            final WrapperWidget wrapperWidget = TagHandler().createTag(
                 Key(keyList[i].toString()),
                 tag.uuid,
                 tag.tagId,
@@ -680,64 +635,31 @@ class _PdfViewerState extends State<PdfViewer>
                 rect.height,
                 tag.data, (uuid, type) {
               //onTap Function Callback
-              widget.retrieveData(type, uuid);
+              widget.retrieveData(type, uuid as String);
             }, (uuid, type, T) {
               // onCompleted Function Callback
               if (T != null) {
                 print('T: $T');
               }
-              print("$uuid");
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                widget.onTagCompleted(uuid, type, T);
+                widget.onTagCompleted(
+                    uuid as String, type as String, T as TagDataModel);
               });
             });
             listWidget.update(
               page.pageNumber,
-                  (value) {
+              (value) {
                 value.add(wrapperWidget);
                 return value;
               },
               ifAbsent: () {
-                List<WrapperWidget> list = <WrapperWidget>[];
+                final List<WrapperWidget> list = <WrapperWidget>[];
                 list.add(wrapperWidget);
                 return list;
               },
             );
           }
         }
-        /*listWidgetBuilder.add((context, pageNumber, pageRect) {
-          var rect = getPos(_padding, tag.tagCoordinateX, tag.tagCoordinateY,
-              tag.width, tag.height, pageNumber, viewSize);
-          widget.tagList[i].rect = rect;
-          */ /*var rect =
-              Rect.fromLTWH(tag.tagCoordinateX, tag.tagCoordinateY, 100, 100);*/ /*
-          if (pageNumber == tag.pageNumber)
-            return TagHandler().createTag(
-                tag.uuid,
-                tag.tagId,
-                tag.key,
-                tag.pageNumber,
-                rect,
-                tag.width,
-                tag.height,
-                rect.width,
-                rect.height,
-                tag.data, (uuid, type) {
-              //onTap Function Callback
-              widget.retrieveData(type, uuid);
-            }, (uuid, type, T) {
-              // onCompleted Function Callback
-              if (T != null) {
-                print('T: $T');
-              }
-              print("$uuid");
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                widget.onTagCompleted(uuid, type, T);
-              });
-            });
-          else
-            return null;
-        });*/
       }
     }
   }
@@ -747,9 +669,9 @@ class _PdfViewerState extends State<PdfViewer>
       final m = _controller.value;
       final r = m.row0[0];
       final exposed =
-      Rect.fromLTWH(-m.row0[3], -m.row1[3], viewSize.width, viewSize.height)
-          .inflate(_padding);
-      if (listWidget.length == 0) _updateTagWidget(viewSize);
+          Rect.fromLTWH(-m.row0[3], -m.row1[3], viewSize.width, viewSize.height)
+              .inflate(_padding);
+      if (listWidget.isEmpty) _updateTagWidget(viewSize);
 
       for (final page in _pages) {
         if (page.rect == null) continue;
@@ -757,26 +679,9 @@ class _PdfViewerState extends State<PdfViewer>
         final pageRectZoomed = Rect.fromLTRB(page.rect.left * r,
             page.rect.top * r, page.rect.right * r, page.rect.bottom * r);
         final part = pageRectZoomed.intersect(exposed);
-        /*if(part.height<0.9 && listWidget.containsKey(page.pageNumber)) {
-          tempListWidget.update(page.pageNumber, (value) => listWidget.remove(page.pageNumber),ifAbsent: ()=>listWidget.remove(page.pageNumber));
-        }else if(part.height>0.9 && !listWidget.containsKey(page.pageNumber) && tempListWidget.containsKey(page.pageNumber)){
-          listWidget.update(page.pageNumber, (value) => tempListWidget.remove(page.pageNumber), ifAbsent: ()=>tempListWidget.remove(page.pageNumber));
-        }*/
         page.isVisibleInsideView = !part.isEmpty;
 
         if (!page.isVisibleInsideView) continue;
-
-        /*if (listWidgetBuilder != null || listWidgetBuilder.length > 0) {
-          for (final tag in listWidgetBuilder)
-            if (tag(context, page.pageNumber, page.rect) != null) {
-              listWidget.add(tag(context, page.pageNumber, page.rect));
-            }
-        }*/
-        /*for (final tag in listWidget)
-          if (tag.pageNumber == page.pageNumber) {
-            print("Tag Id: ${tag.uuid}");
-            print("Tag pageNumber: ${tag.pageNumber}");
-          }*/
         yield Positioned(
           left: page.rect.left,
           top: page.rect.top,
@@ -785,54 +690,8 @@ class _PdfViewerState extends State<PdfViewer>
           child: Container(
             width: page.rect.width,
             height: page.rect.height,
-            child: GestureDetector(
-              onLongPressEnd: widget.onLongPressDone,
-              child: Stack(children: [
-                ValueListenableBuilder<int>(
-                    valueListenable: page._previewNotifier,
-                    builder: (context, value, child) =>
-                    page.preview != null
-                        ? Texture(textureId: page.preview.texId)
-                        : widget.buildPagePlaceholder != null
-                        ? widget.buildPagePlaceholder(
-                        context, page.pageNumber, page.rect)
-                        : Container()),
-                ValueListenableBuilder<int>(
-                    valueListenable: page._realSizeNotifier,
-                    builder: (context, value, child) =>
-                    page.realSizeOverlayRect != null &&
-                                page.realSize != null
-                            ? Positioned(
-                                left: page.realSizeOverlayRect.left,
-                                top: page.realSizeOverlayRect.top,
-                                width: page.realSizeOverlayRect.width,
-                                height: page.realSizeOverlayRect.height,
-                                child: Texture(textureId: page.realSize.texId))
-                            :
-                    Container()),
-                /*if (listWidgetBuilder != null &&
-                    listWidgetBuilder.length > 0 &&
-                    _showTags)
-                  for (final tag in listWidgetBuilder)
-                    if (tag(context, page.pageNumber, page.rect) != null)
-                      tag(context, page.pageNumber, page.rect),*/
-
-                if (listWidget != null &&
-                    listWidget.length > 0 &&
-                    _showTags &&
-                    listWidget.containsKey(page.pageNumber))
-                  for (final tag
-                  in listWidget.update(page.pageNumber, (value) => value))
-                    tag,
-                /*ValueListenableBuilder<int>(
-                        valueListenable: page._previewNotifier,
-                        builder: (context, value, child) {
-                          return tag;
-                        }),*/
-              ]),
-            ),
             decoration: widget.pageDecoration ??
-                BoxDecoration(
+                const BoxDecoration(
                     color: Color.fromARGB(255, 250, 250, 250),
                     boxShadow: [
                       BoxShadow(
@@ -840,6 +699,38 @@ class _PdfViewerState extends State<PdfViewer>
                           blurRadius: 4,
                           offset: Offset(2, 2))
                     ]),
+            child: GestureDetector(
+              onLongPressEnd: widget.onLongPressDone,
+              child: Stack(children: [
+                ValueListenableBuilder<int>(
+                    valueListenable: page._previewNotifier,
+                    builder: (context, value, child) => page.preview != null
+                        ? Texture(textureId: page.preview.texId)
+                        : widget.buildPagePlaceholder != null
+                            ? widget.buildPagePlaceholder(
+                                context, page.pageNumber, page.rect)
+                            : Container()),
+                ValueListenableBuilder<int>(
+                    valueListenable: page._realSizeNotifier,
+                    builder: (context, value, child) =>
+                        page.realSizeOverlayRect != null &&
+                                page.realSize != null
+                            ? Positioned(
+                                left: page.realSizeOverlayRect.left,
+                                top: page.realSizeOverlayRect.top,
+                                width: page.realSizeOverlayRect.width,
+                                height: page.realSizeOverlayRect.height,
+                                child: Texture(textureId: page.realSize.texId))
+                            : Container()),
+                if (listWidget != null &&
+                    listWidget.isNotEmpty &&
+                    _showTags &&
+                    listWidget.containsKey(page.pageNumber))
+                  for (final tag
+                      in listWidget.update(page.pageNumber, (value) => value))
+                    tag,
+              ]),
+            ),
           ),
         );
       }
@@ -847,7 +738,7 @@ class _PdfViewerState extends State<PdfViewer>
   }
 
   /// Not to purge loaded page previews if they're "near" from the current exposed view
-  static final _extraBufferAroundView = 400.0;
+  static const _extraBufferAroundView = 400.0;
 
   void _determinePagesToShow() {
     if (_lastViewSize == null) return;
@@ -906,7 +797,7 @@ class _PdfViewerState extends State<PdfViewer>
       final m = _controller.value;
       final r = m.row0[0];
       final exposed = Rect.fromLTWH(
-          -m.row0[3], -m.row1[3], _lastViewSize.width, _lastViewSize.height)
+              -m.row0[3], -m.row1[3], _lastViewSize.width, _lastViewSize.height)
           .inflate(_extraBufferAroundView);
 
       final pageRectZoomed = Rect.fromLTRB(page.rect.left * r,
@@ -954,7 +845,7 @@ class _PdfViewerState extends State<PdfViewer>
     }
   }
 
-  final _realSizeOverlayUpdateBufferDuration = Duration(milliseconds: 100);
+  final _realSizeOverlayUpdateBufferDuration = const Duration(milliseconds: 100);
 
   void _needRealSizeOverlayUpdate() {
     _cancelLastRealSizeUpdate();
@@ -963,16 +854,16 @@ class _PdfViewerState extends State<PdfViewer>
   }
 
   Future<void> _updateRealSizeOverlay() async {
-    final dpr = MediaQuery
-        .of(context)
-        .devicePixelRatio;
+    final dpr = MediaQuery.of(context).devicePixelRatio;
     final m = _controller.value;
     final r = m.row0[0];
     final exposed = Rect.fromLTWH(
         -m.row0[3], -m.row1[3], _lastViewSize.width, _lastViewSize.height);
     for (final page in _pages) {
-      if (page.rect == null || page.status != _PdfPageLoadingStatus.pageLoaded)
+      if (page.rect == null ||
+          page.status != _PdfPageLoadingStatus.pageLoaded) {
         continue;
+      }
       final pageRectZoomed = Rect.fromLTRB(page.rect.left * r,
           page.rect.top * r, page.rect.right * r, page.rect.bottom * r);
       final part = pageRectZoomed.intersect(exposed);
@@ -1009,8 +900,9 @@ class _PdfViewerState extends State<PdfViewer>
   }
 
   /// Go to the specified location by the matrix.
-  Future<void> _goTo({Matrix4 destination,
-    Duration duration = const Duration(milliseconds: 200)}) async {
+  Future<void> _goTo(
+      {Matrix4 destination,
+      Duration duration = const Duration(milliseconds: 200)}) async {
     try {
       if (destination == null) return; // do nothing
       _animGoTo?.removeListener(_updateControllerMatrix);
@@ -1025,14 +917,6 @@ class _PdfViewerState extends State<PdfViewer>
       // expected
     }
   }
-
-  /*Future<void> _goToNextTag() {
-    if(widget.tagList.elementAt(currentTag).pageNumber!=widget.tagList.elementAt(currentTag+1).pageNumber){
-      _goTo()
-    }
-    currentTag++;
-
-  }*/
 
   void _updateControllerMatrix() {
     _controller.value = _animGoTo.value;
@@ -1080,26 +964,13 @@ class _PdfPageState {
 
   _PdfPageState._({@required this.pageNumber, @required this.pageSize});
 
-  /*Widget previewTexture() => _textureFor(preview, _previewNotifier);*/
-
   void updatePreview() {
     _previewNotifier.value++;
   }
 
-  /*Widget realSizeTexture() => _textureFor(realSize, _realSizeNotifier);*/
-
   void _updateRealSizeOverlay() {
     _realSizeNotifier.value++;
   }
-
-  /*/// Returns [Texture] widget wrapped by [ValueListenableBuilder], which does auto-refresh on texture content changes.
-  Widget _textureFor(PdfPageImageTexture t, ValueNotifier<int> n) {
-    return ValueListenableBuilder<int>(
-      valueListenable: n,
-      builder: (context, value, child) =>
-          t != null ? Texture(textureId: t.texId) : Container(),
-    );
-  }*/
 
   /// Release allocated textures.
   /// It's always safe to call the method. If all the textures were already released, the method does nothing.

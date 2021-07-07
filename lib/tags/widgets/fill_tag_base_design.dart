@@ -29,26 +29,11 @@ class FillTagBaseStructure extends StatefulWidget {
 }
 
 class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
-  var ind = 0;
+  int ind = 0;
   Uint8List image;
-
-  /*@override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if(Functions().cast<SignatureContractModel>(WrapperWidget.of(context).data)!= null){
-        image = Functions().cast<SignatureContractModel>(WrapperWidget.of(context).data).signature;
-        ind=0;
-        setState(() {
-
-        });
-      }
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
-    print("TagBuilder: FillTagBase");
     if (Functions().cast<TagDataModel>(WrapperWidget.of(context).data) !=
             null &&
         Functions()
@@ -58,7 +43,7 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
         !widget.isCfr) {
       image = Functions()
           .cast<TagDataModel>(WrapperWidget.of(context).data)
-          .signature;
+          .signature as Uint8List;
       ind = 1;
       setState(() {});
     }
@@ -67,11 +52,6 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
         if (!widget.autoFill) {
           widget.onTap();
           setState(() {
-            /*if (ind == 0) {
-              ind = 1;
-            } else {
-              ind = 0;
-            }*/
           });
         }
       },
@@ -81,14 +61,14 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
           Container(
             height: widget.height,
             width: widget.width,
+            color: const Color.fromRGBO(216, 243, 254, 1.0),
             child: Padding(
               padding: const EdgeInsets.all(2.0),
               child: Center(
                 child: AutoSizeText(
                   widget.label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.grey,
-                    // fontSize: 12
                   ),
                   maxLines: 1,
                   minFontSize: 10,
@@ -97,15 +77,14 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
                 ),
               ),
             ),
-            color: Color.fromRGBO(216, 243, 254, 1.0),
           ),
           Container(
-            color: Color.fromRGBO(216, 243, 254, 1.0),
+            color: const Color.fromRGBO(216, 243, 254, 1.0),
             height: widget.height,
             width: widget.width,
             child: FittedBox(
-              child: image != null ? Image.memory(image) : Container(),
               fit: BoxFit.fill,
+              child: image != null ? Image.memory(image) : Container(),
             ),
           ),
         ],

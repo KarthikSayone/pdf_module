@@ -6,17 +6,12 @@ import 'package:pdf_module/tags/widgets/resizable_widget.dart';
 import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class Attachment extends StatefulWidget {
-  // final String uuid;
   final Function onTap;
-  final Function onCompleted; // return with a string
-  // final Rect rect;
-  // final double width;
-  // final double height;
+  final Function onCompleted;
 
-  Attachment({
+  const Attachment({
     this.onTap,
     this.onCompleted,
-    /* this.rect, this.width, this.height, this.uuid*/
   });
 
   @override
@@ -24,17 +19,15 @@ class Attachment extends StatefulWidget {
 }
 
 class _AttachmentState extends State<Attachment> {
-  TextEditingController controller = TextEditingController();
   ResizableWidgetController widgetController;
-  bool readOnly = false;
 
   @override
   Widget build(BuildContext context) {
-    print("TagBuilder: Attachment");
     if (WrapperWidget.of(context).data != null &&
-        WrapperWidget.of(context).data.attachmentData != null)
+        WrapperWidget.of(context).data.attachmentData != null) {
       widget.onCompleted(WrapperWidget.of(context).uuid, "Attachment",
           WrapperWidget.of(context).data);
+    }
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
@@ -46,14 +39,14 @@ class _AttachmentState extends State<Attachment> {
         c.resize(WrapperWidget.of(context).scaledWidth,
             WrapperWidget.of(context).scaledHeight);
       },
-      isDraggable: false,
       child: FillTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
         onCompleted: () {},
         onTap: () {
-          if (WrapperWidget.of(context).data == null)
+          if (WrapperWidget.of(context).data == null) {
             widget.onTap(WrapperWidget.of(context).uuid, "Attachment");
+          }
         },
         label: WrapperWidget.of(context).data == null
             ? "Attachment"

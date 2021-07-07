@@ -45,8 +45,9 @@ widget.widgetController?? _myController;
   @override
   void initState() {
     super.initState();
-    if(widget.widgetController==null)
+    if(widget.widgetController==null) {
       _myController??=ResizableWidgetController();
+    }
     setState(() {
       height = widget.height;
       width = widget.width;
@@ -63,8 +64,7 @@ widget.widgetController?? _myController;
 
   @override
   Widget build(BuildContext context) {
-    return /*Stack(
-      children: <Widget>[*/
+    return
         Positioned(
           top: top,
           left: left,
@@ -72,16 +72,9 @@ widget.widgetController?? _myController;
             // height: height,
             width: width,
 
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.transparent,
-              // border: Border.all(
-              //   width: 2,
-              //   color: Colors.white70,
-              // ),
-              // borderRadius: BorderRadius.circular(0.0),
             ),
-
-            // need tp check if draggable is done from corner or sides
             child: isCorner
                 ? FittedBox(
               child: widget.child,
@@ -90,210 +83,14 @@ widget.widgetController?? _myController;
               child: widget.child,
             ),
           ),
-        /*),*/
-        // top left
-        /*isDraggable
-            ? Positioned(
-          top: top - ballDiameter / 2,
-          left: left - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var mid = (dx + dy) / 2;
-              var newHeight = height - 2 * mid;
-              var newWidth = width - 2 * mid;
-
-              setState(() {
-                isCorner = true;
-                height = newHeight > 0 ? newHeight : 0;
-                width = newWidth > 0 ? newWidth : 0;
-                top = top + mid;
-                left = left + mid;
-              });
-            },
-            handlerWidget: HandlerWidget.VERTICAL,
-          ),
-        )
-            : Container(),
-        // top middle
-        isDraggable
-            ? Positioned(
-          top: top - ballDiameter / 2,
-          left: left + width / 2 - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var newHeight = height - dy;
-
-              setState(() {
-                isCorner = false;
-
-                height = newHeight > 0 ? newHeight : 0;
-                top = top + dy;
-              });
-            },
-            handlerWidget: HandlerWidget.HORIZONTAL,
-          ),
-        )
-            : Container(),
-        // top right
-        isDraggable
-            ? Positioned(
-          top: top - ballDiameter / 2,
-          left: left + width - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var mid = (dx + (dy * -1)) / 2;
-
-              var newHeight = height + 2 * mid;
-              var newWidth = width + 2 * mid;
-
-              setState(() {
-                isCorner = true;
-                height = newHeight > 0 ? newHeight : 0;
-                width = newWidth > 0 ? newWidth : 0;
-                top = top - mid;
-                left = left - mid;
-              });
-            },
-            handlerWidget: HandlerWidget.VERTICAL,
-          ),
-        )
-            : Container(),
-        // center right
-        isDraggable
-            ? Positioned(
-          top: top + height / 2 - ballDiameter / 2,
-          left: left + width - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var newWidth = width + dx;
-
-              setState(() {
-                isCorner = false;
-
-                width = newWidth > 0 ? newWidth : 0;
-              });
-            },
-            handlerWidget: HandlerWidget.HORIZONTAL,
-          ),
-        )
-            : Container(),
-        // bottom right
-        isDraggable
-            ? Positioned(
-          top: top + height - ballDiameter / 2,
-          left: left + width - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var mid = (dx + dy) / 2;
-
-              var newHeight = height + 2 * mid;
-              var newWidth = width + 2 * mid;
-
-              setState(() {
-                isCorner = true;
-
-                height = newHeight > 0 ? newHeight : 0;
-                width = newWidth > 0 ? newWidth : 0;
-                top = top - mid;
-                left = left - mid;
-              });
-            },
-            handlerWidget: HandlerWidget.VERTICAL,
-          ),
-        )
-            : Container(),
-        // bottom center
-        isDraggable
-            ? Positioned(
-          top: top + height - ballDiameter / 2,
-          left: left + width / 2 - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var newHeight = height + dy;
-
-              setState(() {
-                isCorner = false;
-
-                height = newHeight > 0 ? newHeight : 0;
-              });
-            },
-            handlerWidget: HandlerWidget.HORIZONTAL,
-          ),
-        )
-            : Container(),
-        // bottom left
-        isDraggable
-            ? Positioned(
-          top: top + height - ballDiameter / 2,
-          left: left - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var mid = ((dx * -1) + dy) / 2;
-
-              var newHeight = height + 2 * mid;
-              var newWidth = width + 2 * mid;
-
-              setState(() {
-                isCorner = true;
-
-                height = newHeight > 0 ? newHeight : 0;
-                width = newWidth > 0 ? newWidth : 0;
-                top = top - mid;
-                left = left - mid;
-              });
-            },
-            handlerWidget: HandlerWidget.VERTICAL,
-          ),
-        )
-            : Container(),
-        //left center
-        isDraggable
-            ? Positioned(
-          top: top + height / 2 - ballDiameter / 2,
-          left: left - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              var newWidth = width - dx;
-
-              setState(() {
-                isCorner = false;
-
-                width = newWidth > 0 ? newWidth : 0;
-                left = left + dx;
-              });
-            },
-            handlerWidget: HandlerWidget.HORIZONTAL,
-          ),
-        )
-            : Container(),
-        // center center
-        isDraggable
-            ? Positioned(
-          top: top + height / 2 - ballDiameter / 2,
-          left: left + width / 2 - ballDiameter / 2,
-          child: ManipulatingBall(
-            onDrag: (dx, dy) {
-              setState(() {
-                isCorner = false;
-
-                top = top + dy;
-                left = left + dx;
-              });
-            },
-            handlerWidget: HandlerWidget.VERTICAL,
-          ),
-        )
-            : Container(),*/
-      // ],
     );
   }
 
-  void resize(newWidth, newHeight) {
-
+  void resize(double newWidth, double newHeight) {
     setState(() {
       isCorner = true;
-      height = newHeight > 0 ? newHeight : 0;
-      width = newWidth > 0 ? newWidth : 0;
+      height = newHeight > 0 != null ? newHeight : 0;
+      width = newWidth > 0 != null ? newWidth : 0;
     });
   }
 }
@@ -307,14 +104,13 @@ class ResizableWidgetController {
     _state = state;
   }
 
-  void resize(dx, dy){
+  void resize(double dx, double dy){
     _state.resize(dx, dy);
   }
-
 }
 
 class ManipulatingBall extends StatefulWidget {
-  ManipulatingBall({Key key, this.onDrag, this.handlerWidget});
+  const ManipulatingBall({this.onDrag, this.handlerWidget});
 
   final Function onDrag;
   final HandlerWidget handlerWidget;
@@ -329,18 +125,18 @@ class _ManipulatingBallState extends State<ManipulatingBall> {
   double initX;
   double initY;
 
-  _handleDrag(details) {
+  void _handleDrag(details) {
     setState(() {
-      initX = details.globalPosition.dx;
-      initY = details.globalPosition.dy;
+      initX = details.globalPosition.dx as double;
+      initY = details.globalPosition.dy as double;
     });
   }
 
-  _handleUpdate(details) {
-    var dx = details.globalPosition.dx - initX;
-    var dy = details.globalPosition.dy - initY;
-    initX = details.globalPosition.dx;
-    initY = details.globalPosition.dy;
+  void _handleUpdate(details) {
+    final dx = details.globalPosition.dx - initX;
+    final dy = details.globalPosition.dy - initY;
+    initX = details.globalPosition.dx as double;
+    initY = details.globalPosition.dy as double;
     widget.onDrag(dx, dy);
   }
 
@@ -358,7 +154,7 @@ class _ManipulatingBallState extends State<ManipulatingBall> {
             height: ballDiameter / 2,
             decoration: BoxDecoration(
               color: Colors.blue[300],
-              shape: this.widget.handlerWidget == HandlerWidget.VERTICAL
+              shape: widget.handlerWidget == HandlerWidget.VERTICAL
                   ? BoxShape.circle
                   : BoxShape.rectangle,
             ),

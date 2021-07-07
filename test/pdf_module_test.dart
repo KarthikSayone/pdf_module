@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pdf_module/pdf_module.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('pdf_module');
@@ -17,7 +16,5 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await PdfModule.platformVersion, '42');
-  });
+
 }
