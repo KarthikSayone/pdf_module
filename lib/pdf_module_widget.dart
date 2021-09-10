@@ -622,21 +622,14 @@ class _PdfViewerState extends State<PdfViewer>
               tag.width, tag.height, page.pageNumber, viewSize);
           widget.tagList[i].rect = rect;
           if (page.pageNumber == tag.pageNumber) {
-            final WrapperWidget wrapperWidget = TagHandler().createTag(
-                Key(keyList[i].toString()),
-                tag.uuid,
+            final Widget childTag = TagHandler().createTag(
                 tag.tagId,
                 tag.key,
-                tag.pageNumber,
-                rect,
-                tag.width,
-                tag.height,
-                rect.width,
-                rect.height,
-                tag.data, (uuid, type) {
+                (uuid, type) {
               //onTap Function Callback
               widget.retrieveData(type, uuid as String);
-            }, (uuid, type, T) {
+            },
+                    (uuid, type, T) {
               // onCompleted Function Callback
               if (T != null) {
                 print('T: $T');
@@ -646,6 +639,19 @@ class _PdfViewerState extends State<PdfViewer>
                     uuid as String, type as String, T as TagDataModel);
               });
             });
+
+            final WrapperWidget wrapperWidget =  WrapperWidget(
+                key: Key(keyList[i].toString()),
+                uuid: tag.uuid,
+                pageNumber: tag.pageNumber,
+                rect: rect,
+                width: tag.width,
+                height: tag.height,
+                scaledHeight: rect.height,
+                scaledWidth: rect.width,
+                data: tag.data,
+                child: childTag);
+
             listWidget.update(
               page.pageNumber,
               (value) {
