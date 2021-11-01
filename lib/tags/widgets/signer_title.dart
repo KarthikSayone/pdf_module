@@ -6,14 +6,10 @@ import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 import 'model/tag_data_model.dart';
 
 class SignerTitle extends StatefulWidget {
-  // final String uuid;
   final Function onTap;
   final Function onCompleted;
-  // final Rect rect;
-  // final double width;
-  // final double height;
 
-  SignerTitle({/*this.width, this.height, this.rect, */this.onTap, this.onCompleted,/* this.uuid*/});
+  const SignerTitle({this.onTap, this.onCompleted,});
 
   @override
   _SignerTitleState createState() => _SignerTitleState();
@@ -26,14 +22,14 @@ class _SignerTitleState extends State<SignerTitle> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (WrapperWidget.of(context).data== null || WrapperWidget.of(context).data.signerTitle == null)
-      widget.onTap( WrapperWidget.of(context).uuid, "SignerTitle");
+      if (WrapperWidget.of(context).data== null || WrapperWidget.of(context).data.signerTitle == null) {
+        widget.onTap( WrapperWidget.of(context).uuid, "SignerTitle");
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print("TagBuilder: SignerTitle");
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
@@ -44,21 +40,17 @@ class _SignerTitleState extends State<SignerTitle> {
         widgetController = c;
         c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
       },
-      isDraggable: false,
       child: EditableTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
-        initialData: WrapperWidget.of(context).data!=null?WrapperWidget.of(context).data.signerTitle:null,
+        initialData: WrapperWidget.of(context).data?.signerTitle,
         onCompleted: (text) {
-          print('Text: $text');
-          if(WrapperWidget.of(context).data==null)
+          if(WrapperWidget.of(context).data==null) {
             WrapperWidget.of(context).data = TagDataModel();
-          WrapperWidget.of(context).data.signerTitle = text;
+          }
+          WrapperWidget.of(context).data.signerTitle = text as String;
           widget.onCompleted( WrapperWidget.of(context).uuid, "SignerTitle", WrapperWidget.of(context).data);
         },
-        /*onTap: (){
-          print("signer tap");
-        },*/
         label: "Signer Title",),
     );
   }

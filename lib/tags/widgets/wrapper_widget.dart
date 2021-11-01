@@ -33,8 +33,4 @@ class WrapperWidget extends InheritedWidget{
   @override
   bool updateShouldNotify(WrapperWidget old)=> old.data!= null || data != old.data;
 
-  /*set data(dynamic value) {
-    data = value;
-  }*/
-
 }

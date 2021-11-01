@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pdf_module/tags/tag_handler.dart';
 import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
 
 class TagModel {

@@ -12,7 +12,7 @@ class CustomText extends StatefulWidget {
   final double width;
   final double height;*/
 
-  CustomText({/*this.width, this.height, this.rect,*/ this.onTap, this.onCompleted, /*this.uuid*/});
+  const CustomText({this.onTap, this.onCompleted, });
 
   @override
   _CustomTextState createState() => _CustomTextState();
@@ -23,7 +23,6 @@ class _CustomTextState extends State<CustomText> {
 
   @override
   Widget build(BuildContext context) {
-    print("TagBuilder: CustomText");
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
@@ -34,15 +33,14 @@ class _CustomTextState extends State<CustomText> {
         widgetController = c;
         c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
       },
-      isDraggable: false,
       child: EditableTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
-          print('Text: $text');
-          if(WrapperWidget.of(context).data==null)
+          if(WrapperWidget.of(context).data==null) {
             WrapperWidget.of(context).data = TagDataModel();
-          WrapperWidget.of(context).data.customText = text;
+          }
+          WrapperWidget.of(context).data.customText = text as String;
           widget.onCompleted( WrapperWidget.of(context).uuid, "CustomText", WrapperWidget.of(context).data);
         },
         label: "Custom Text",),

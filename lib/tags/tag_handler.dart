@@ -7,6 +7,7 @@ import 'package:pdf_module/tags/widgets/check_box.dart';
 import 'package:pdf_module/tags/widgets/custom_text.dart';
 import 'package:pdf_module/tags/widgets/custom_text_area.dart';
 import 'package:pdf_module/tags/widgets/initials.dart';
+import 'package:pdf_module/tags/widgets/model/tag_data_model.dart';
 import 'package:pdf_module/tags/widgets/reason.dart';
 import 'package:pdf_module/tags/widgets/sign_here.dart';
 import 'package:pdf_module/tags/widgets/signature_21cfr.dart';
@@ -21,317 +22,129 @@ import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 
 class TagHandler {
   Widget createTag(
-      Key widgetKey,
-      String uuid,
       String tagId,
       String key,
-      int pageNumber,
-      Rect rect,
-      double width,
-      double height,
-      double scaledWidth,
-      double scaledHeight,
-      dynamic data,
       Function onTap,
       Function onCompleted,
       ) {
     switch (tagId+key) {
       case "1signerName":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              data: data,
-              child: SignerName(
-                onTap: onTap,
-                onCompleted: onCompleted,
-                /*uuid: uuid,
-            rect: rect,
-            width: width,
-            height: height,*/
-              ));
+          return SignerName(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "2signTimeStamp":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              child: TimeStamp(
-                onCompleted: onCompleted,
-              ));
+          return TimeStamp(
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "3signerText":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              child: SignerText(
-                /*uuid: uuid,
-            rect: rect,
-            width: width,
-            height: height,*/
-                onTap: onTap,
-                onCompleted: onCompleted,
-              ));
+          return SignerText(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "4Reason":
         {
-          return WrapperWidget(
-            key: widgetKey,
-            uuid: uuid,
-            pageNumber: pageNumber,
-            rect: rect,
-            width: width,
-            height: height,
-            scaledHeight: scaledHeight,
-            scaledWidth: scaledWidth,
-            data: data,
-            child: Reason(
-              /*uuid: "12334235434",
-            rect: rect,*/
-              onCompleted: onCompleted,
-              onTap: onTap,
-            ),
+          return Reason(
+            onCompleted: onCompleted,
+            onTap: onTap,
           );
         }
         break;
       case "5Signature":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              data: data,
-              child: SignatureContract(
-                onTap: onTap,
-                onCompleted: onCompleted,
-                /*uuid: uuid,
-            rect: rect,
-            width: width,
-            height: height,*/
-              ));
+          return SignatureContract(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "6signerInitial":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              data: data,
-              child: Initials(
-                onTap: onTap,
-                onCompleted: onCompleted,
-                /*uuid: uuid,
-            rect: rect,
-            width: width,
-            height: height,*/
-              ));
+          return Initials(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "7":
-      /*{
-          return CustodianText(
-            uuid: "12334235434",
-            rect: rect,
-          );
-        }*/
         break;
       case "10signerTitle":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              data: data,
-              child: SignerTitle(
-                /*uuid: uuid,
-            rect: rect,
-            width: width,
-            height: height,*/
-                onTap: onTap,
-                onCompleted: onCompleted,
-              ));
+          return SignerTitle(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "15Signature":
         {
-          return WrapperWidget(
-            key: widgetKey,
-            uuid: uuid,
-            pageNumber: pageNumber,
-            rect: rect,
-            width: width,
-            height: height,
-            scaledHeight: scaledHeight,
-            scaledWidth: scaledWidth,
-            data: data,
-            child: Signature21CFR(
-              onTap: onTap,
-              onCompleted: onCompleted,
-            ),
+          return Signature21CFR(
+            onTap: onTap,
+            onCompleted: onCompleted,
           );
         }
         break;
       case "18attachment":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              data: data,
-              child: Attachment(
-                onTap: onTap,
-                onCompleted: onCompleted,
-              ));
+          return Attachment(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "19selfSignAttachment":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              child: /*Signed*/ Attachment(
-                onTap: onTap,
-                onCompleted: onCompleted,
-              ));
+          return Attachment(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "20customText":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              child: CustomText(
-                onTap: onTap,
-                onCompleted: onCompleted,
-              ));
+          return CustomText(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "20customTextArea":
         {
-          //id is given as 20 but 20 is already assigned
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              child: CustomTextArea(
-                onTap: onTap,
-                onCompleted: onCompleted,
-              ));
+          return CustomTextArea(
+            onTap: onTap,
+            onCompleted: onCompleted,
+          );
         }
         break;
       case "27checkbox":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              pageNumber: pageNumber,
-              rect: rect,
-              width: width,
-              height: height,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              child: CheckBoxTag(
-                selectedCallback: onCompleted,
-                // rect: rect,
-              ));
+          return CheckBoxTag(
+            selectedCallback: onCompleted,
+            // rect: rect,
+          );
         }
         break;
       case "31image":
         {
-          return WrapperWidget(
-              key: widgetKey,
-              uuid: uuid,
-              rect: rect,
-              pageNumber: pageNumber,
-              width: width,
-              height: height,
-              data: data,
-              scaledHeight: scaledHeight,
-              scaledWidth: scaledWidth,
-              child: UploadImageTag(
-                onTap: onTap,
-                onComplete: onCompleted,
-                // rect: rect,
-              ));
+          return UploadImageTag(
+            onTap: onTap,
+            onComplete: onCompleted,
+          );
         }
         break;
       case "4Calendar":
         {
-          //id is given as 4 but 4 is already assigned
-          return WrapperWidget(
-            key: widgetKey,
-            uuid: uuid,
-            rect: rect,
-            pageNumber: pageNumber,
-            width: width,
-            height: height,
-            scaledHeight: scaledHeight,
-            scaledWidth: scaledWidth,
-            data: data,
-            child: CalenderTag(
-              onComplete: onCompleted,
-              // rect: rect,
-            ),
+          return CalenderTag(
+            onComplete: onCompleted,
           );
         }
         break;

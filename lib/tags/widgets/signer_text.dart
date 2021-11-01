@@ -6,18 +6,11 @@ import 'package:pdf_module/tags/widgets/wrapper_widget.dart';
 import 'model/tag_data_model.dart';
 
 class SignerText extends StatefulWidget {
-  // final String uuid;
   final Function onTap;
   final Function onCompleted;
 
-  /*final Rect rect;
-  final double width;
-  final double height;*/
-
-  SignerText({
-    /*this.width, this.height, this.rect,*/ this.onTap,
+  const SignerText({this.onTap,
     this.onCompleted,
-    /* this.uuid*/
   });
 
   @override
@@ -28,12 +21,7 @@ class _SignerTextState extends State<SignerText> {
   ResizableWidgetController widgetController;
   @override
   Widget build(BuildContext context) {
-    return /*Positioned(
-      top: WrapperWidget.of(context).rect.top,
-      left: WrapperWidget.of(context).rect.left,
-      height: WrapperWidget.of(context).height,
-      width: WrapperWidget.of(context).width,
-      child: */
+    return
         ResizebleWidget(
           width: WrapperWidget.of(context).width,
           height: WrapperWidget.of(context).height,
@@ -44,24 +32,19 @@ class _SignerTextState extends State<SignerText> {
         widgetController = c;
         c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
       },
-      isDraggable: false,
       child: EditableTagBaseStructure(
         width: WrapperWidget.of(context).width,
         height: WrapperWidget.of(context).height,
         onCompleted: (text) {
-          if(WrapperWidget.of(context).data==null)
+          if(WrapperWidget.of(context).data==null) {
             WrapperWidget.of(context).data = TagDataModel();
-          WrapperWidget.of(context).data.signerText = text;
+          }
+          WrapperWidget.of(context).data.signerText = text as String;
           widget.onCompleted(
               WrapperWidget.of(context).uuid, "SignerText", WrapperWidget.of(context).data);
         },
-        /*onTap: () {
-          print("signer tap");
-          widget.onTap();
-        },*/
         label: "Signer Text",
       ),
-      /*),*/
     );
   }
 }

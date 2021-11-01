@@ -10,7 +10,7 @@ class CheckBoxTag extends StatefulWidget {
   final bool value;
   final Function onCompleted;
 
-  CheckBoxTag({@required this.selectedCallback, this.value, this.uuid, this.onCompleted});
+  const CheckBoxTag({@required this.selectedCallback, this.value, this.uuid, this.onCompleted});
 
   @override
   _CheckBoxTagState createState() => _CheckBoxTagState();
@@ -27,8 +27,9 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
       widget.value != null ? _selected = widget.value : _selected = false;
     });
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if(WrapperWidget.of(context).data==null)
+        if(WrapperWidget.of(context).data==null) {
           WrapperWidget.of(context).data = TagDataModel();
+        }
         WrapperWidget.of(context).data.checkBox = null;
         widget.selectedCallback( WrapperWidget
             .of(context)
@@ -39,7 +40,6 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
 
   @override
   Widget build(BuildContext context) {
-    print("TagBuilder: CheckBox");
     return ResizebleWidget(
       width: WrapperWidget.of(context).width,
       height: WrapperWidget.of(context).height,
@@ -50,29 +50,28 @@ class _CheckBoxTagState extends State<CheckBoxTag> {
         widgetController = c;
         c.resize(WrapperWidget.of(context).scaledWidth, WrapperWidget.of(context).scaledHeight);
       },
-      isDraggable: false,
       child: InkWell(
         onTap: () {
           setState(() {
             _selected == false ? _selected = true : _selected = false;
           });
-          if(WrapperWidget.of(context).data==null)
+          if(WrapperWidget.of(context).data==null) {
             WrapperWidget.of(context).data = TagDataModel();
+          }
           WrapperWidget.of(context).data.checkBox = _selected;
           widget.selectedCallback( WrapperWidget.of(context).uuid, "CheckBox", WrapperWidget.of(context).data);
         },
         child: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(2)),
+                borderRadius: const BorderRadius.all(Radius.circular(2)),
                 border: Border.all(
-                  color: Colors.black,
                   width: 0.3,
                 )),
             width: WrapperWidget.of(context).width,
             height: WrapperWidget.of(context).height,
             child: AnimatedOpacity(
                 opacity: _selected ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 child: Image.asset("assets/images/checkbox.png")
             )),
       ),
