@@ -44,7 +44,7 @@ class _ReasonState extends State<Reason> {
           .of(context)
           .data.reasonList;
     }
-    if(WrapperWidget.of(context).data.reasonSelected!=null)
+    if(WrapperWidget.of(context).data!=null && WrapperWidget.of(context).data.reasonSelected!=null)
       _pickerData = WrapperWidget.of(context).data.reasonSelected;
 
     return widget.isCfrChild?Container(
