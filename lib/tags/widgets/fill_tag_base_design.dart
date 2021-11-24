@@ -68,7 +68,8 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
                 child: AutoSizeText(
                   widget.label,
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.black,
+                    fontSize: 15
                   ),
                   maxLines: 1,
                   softWrap: false,
