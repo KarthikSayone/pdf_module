@@ -69,10 +69,8 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
                   widget.label,
                   style: const TextStyle(
                     color: Colors.grey,
-                    fontSize: 9
+                    fontSize: 10
                   ),
-                  maxLines: 1,
-                  softWrap: false,
                 ),
               ),
             ),
