@@ -65,7 +65,7 @@ class _FillTagBaseStructureState extends State<FillTagBaseStructure> {
             child: Padding(
               padding: const EdgeInsets.all(2.0),
               child: Center(
-                child: AutoSizeText(
+                child: Text(
                   widget.label,
                   style: const TextStyle(
                     color: Colors.grey,
